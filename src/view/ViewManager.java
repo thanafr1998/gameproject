@@ -6,7 +6,6 @@ import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,6 +19,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.stage.Stage;
 import model.gameButton;
 import model.infoLabel;
+import model.inputField;
 import model.subScene;
 
 public class ViewManager {
@@ -73,11 +73,16 @@ public class ViewManager {
 	private void createPlaySubScene() {
 		playSubScene = new subScene();
 		infoLabel label = new infoLabel("Enter Your Name :");
-		Button enterButton = new Button();
+		gameButton enterButton = new gameButton("ENTER");
+		inputField enterName = new inputField("", "Enter Your Name");
 		
-		enterButton.setPrefSize(50, 50);
-		enterButton.setLayoutX(910);
-		enterButton.setLayoutY(550);
+		enterName.setLayoutX(100);
+		enterName.setLayoutY(100);
+		
+		enterButton.setFontSize(15);
+		enterButton.setPrefSize(190, 50);
+		enterButton.setLayoutX(250);
+		enterButton.setLayoutY(200);
 		enterButton.setOnMousePressed(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -93,8 +98,9 @@ public class ViewManager {
 		});
 		
 		mainPane.getChildren().add(playSubScene);
-		mainPane.getChildren().add(label);
-		mainPane.getChildren().add(enterButton);
+		playSubScene.getRoot2().getChildren().add(label);
+		playSubScene.getRoot2().getChildren().add(enterName);
+		playSubScene.getRoot2().getChildren().add(enterButton);
 	}
 	
 	public Stage getMainStage(){

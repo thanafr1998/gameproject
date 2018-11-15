@@ -13,8 +13,9 @@ public class infoLabel extends Label{
 	
 	public infoLabel(String text) {
 		
-		setPrefSize(200, 200);
+		setPrefSize(400, 150);
 		setPadding(new Insets(10, 10, 10, 10));
+		setLayoutX(50);
 		setText(text);
 		setStringFont();
 		setWrapText(true);

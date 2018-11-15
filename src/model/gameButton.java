@@ -17,6 +17,7 @@ public class gameButton extends Button{
 	private final String BUTTON_FREE = "-fx-background-color: transparent; -fx-background-image: url('/model/resources/blue_button04.png')";
 	private final String BUTTON_ENTER = "-fx-background-color: transparent; -fx-background-image: url('/model/resources/blue_button02.png')";
 	
+	private int fontSize = 18;
 	
 	public gameButton(String text) {
 		
@@ -31,12 +32,18 @@ public class gameButton extends Button{
 	private void setButtonFont() {
 	
 		try {
-			setFont(Font.loadFont(new FileInputStream(FONT_PATH),18));
+			setFont(Font.loadFont(new FileInputStream(FONT_PATH),fontSize));
 		} catch (FileNotFoundException e) {
-			setFont(Font.font("Arial", 18));
+			setFont(Font.font("Arial", fontSize));
 		}
 	}
 	
+	public int setFontSize(int a) {
+		fontSize = a;
+		setButtonFont();
+		return fontSize;
+	}
+
 	private void setButton(String style) {
 		setStyle(style);
 		setPrefSize(190, 45);
