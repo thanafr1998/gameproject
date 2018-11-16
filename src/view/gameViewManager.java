@@ -21,7 +21,6 @@ public class GameViewManager{
 	
 	private GameButton button;
 	
-	
 	public GameViewManager() {
 			
 		InitializeStage();
@@ -102,6 +101,13 @@ public class GameViewManager{
 		gameStage.hide();
 		hideStage.show();
 		
+		
+		
 	}
+	
+	public AnchorPane getGamePane() {
+		return gamePane;
+	}
+
 	
 }

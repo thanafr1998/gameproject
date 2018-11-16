@@ -34,8 +34,8 @@ public class ViewManager {
 	
 	private static final int button_x = 100;
 	private static final int button_y = 120;
-	List<GameButton> menuButtons;
-	
+	private List<GameButton> menuButtons;
+
 	private String name = "";
 	
 	private subScene playSubScene;
@@ -105,6 +105,7 @@ public class ViewManager {
 					}
 				}
 			}
+			
 		});
 		
 		mainPane.getChildren().add(playSubScene);
@@ -118,7 +119,7 @@ public class ViewManager {
 	}
 	
 	private void createLogo() {
-		ImageView logo = new ImageView("view/resoucres/Contra-Energy-Logo.png");
+		ImageView logo = new ImageView("view/resources/Contra-Energy-Logo.png");
 		logo.setLayoutX(450);
 		logo.setLayoutY(450);
 		logo.setFitWidth(450);
@@ -239,10 +240,9 @@ public class ViewManager {
 	}
 	
 	private void createBackground() {
-		Image backgroundImage = new Image("view/resoucres/the-background-2819000_960_720.png",960,600,false,true);
+		Image backgroundImage = new Image("view/resources/the-background-2819000_960_720.png",960,600,false,true);
 		BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
 		mainPane.setBackground(new Background(background));
 	}
-	
 	
 }
