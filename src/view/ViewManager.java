@@ -6,6 +6,8 @@ import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,9 +19,9 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.stage.Stage;
-import model.gameButton;
-import model.infoLabel;
-import model.inputField;
+import model.GameButton;
+import model.InfoLabel;
+import model.InputField;
 import model.subScene;
 
 public class ViewManager {
@@ -32,13 +34,14 @@ public class ViewManager {
 	
 	private static final int button_x = 100;
 	private static final int button_y = 120;
-	List<gameButton> menuButtons;
+	List<GameButton> menuButtons;
+	
+	private String name = "";
 	
 	private subScene playSubScene;
 	private subScene howToPlaySubScene;
 	private subScene creditSubScene;
 	private subScene exitSubScene;
-	
 	private subScene showSubScene;
 	
 	public ViewManager() {
@@ -72,9 +75,9 @@ public class ViewManager {
 	
 	private void createPlaySubScene() {
 		playSubScene = new subScene();
-		infoLabel label = new infoLabel("Enter Your Name :");
-		gameButton enterButton = new gameButton("ENTER");
-		inputField enterName = new inputField("", "Enter Your Name");
+		InfoLabel label = new InfoLabel("Enter Your Name :");
+		GameButton enterButton = new GameButton("ENTER");
+		InputField enterName = new InputField("", "Enter Your Name");
 		
 		enterName.setLayoutX(100);
 		enterName.setLayoutY(100);
@@ -84,17 +87,24 @@ public class ViewManager {
 		enterButton.setLayoutX(250);
 		enterButton.setLayoutY(200);
 		enterButton.setOnMousePressed(new EventHandler<MouseEvent>() {
-
+		
 			@Override
 			public void handle(MouseEvent event) {
-				if(event.getButton().equals(MouseButton.PRIMARY)) {
-					
-					gameViewManager gameView = new gameViewManager();
-					gameView.hideMenuScene(mainStage);
-				}
-				
-			}
 
+				name = enterName.getText();
+				if(name.equals("")) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setContentText("Please Fill In Your Name");
+					alert.showAndWait();
+				}else {
+					if(event.getButton().equals(MouseButton.PRIMARY)) {
+					
+					GameViewManager gameView = new GameViewManager();
+					gameView.hideMenuScene(mainStage);
+					
+					}
+				}
+			}
 		});
 		
 		mainPane.getChildren().add(playSubScene);
@@ -131,7 +141,7 @@ public class ViewManager {
 		mainPane.getChildren().add(logo);
 	}
 	
-	private void addMenuButton(gameButton button) {
+	private void addMenuButton(GameButton button) {
 		button.setLayoutX(button_x);
 		button.setLayoutY(button_y + menuButtons.size()*100);
 		menuButtons.add(button);
@@ -146,7 +156,7 @@ public class ViewManager {
 	}
 	
 	private void createStartButton() {
-		gameButton startButton = new gameButton("Start");
+		GameButton startButton = new GameButton("Start");
 		addMenuButton(startButton);
 		
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -167,7 +177,7 @@ public class ViewManager {
 	}
 	
 	private void createHowToPlayButton() {
-		gameButton howToPlayButton = new gameButton("How To Play");
+		GameButton howToPlayButton = new GameButton("How To Play");
 		addMenuButton(howToPlayButton);
 		
 		howToPlayButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -186,7 +196,7 @@ public class ViewManager {
 	}
 	
 	private void createCreditButton() {
-		gameButton creditButton = new gameButton("Credit");
+		GameButton creditButton = new GameButton("Credit");
 		addMenuButton(creditButton);
 		
 		creditButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -205,7 +215,7 @@ public class ViewManager {
 	}
 	
 	private void createExitButton() {
-		gameButton exitButton = new gameButton("Exit");
+		GameButton exitButton = new GameButton("Exit");
 		addMenuButton(exitButton);
 		
 		exitButton.setOnAction(new EventHandler<ActionEvent>() {

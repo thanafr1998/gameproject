@@ -5,11 +5,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
-public class inputField extends VBox {
+public class InputField extends VBox {
 	
 	private TextField textField;
 	
-	public inputField(String title, String promptText) {
+	public InputField(String title, String promptText) {
 
 		super.setPadding(new Insets(5, 5, 5, 5));
 		super.setSpacing(5);

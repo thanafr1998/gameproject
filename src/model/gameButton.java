@@ -10,7 +10,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 
-public class gameButton extends Button{
+public class GameButton extends Button{
 	
 	private final String FONT_PATH = "src/model/resources/kenvector_future.ttf";
 	private final String BUTTON_PRESSED = "-fx-background-color: transparent; -fx-background-image: url('/model/resources/blue_button03.png')";
@@ -19,7 +19,7 @@ public class gameButton extends Button{
 	
 	private int fontSize = 18;
 	
-	public gameButton(String text) {
+	public GameButton(String text) {
 		
 		setText(text);
 		setButtonFont();

@@ -7,11 +7,11 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 
-public class infoLabel extends Label{
+public class InfoLabel extends Label{
 	
 	private final String FONT_PATH = "src/model/resources/kenvector_future.ttf";
 	
-	public infoLabel(String text) {
+	public InfoLabel(String text) {
 		
 		setPrefSize(400, 150);
 		setPadding(new Insets(10, 10, 10, 10));

@@ -1,17 +1,16 @@
 package view;
 
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.GameButton;
 
-public class gameViewManager{
+public class GameViewManager{
 
 	private static final int width = 960;
 	private static final int height = 600;
@@ -20,10 +19,10 @@ public class gameViewManager{
 	private Stage gameStage;
 	private Stage hideStage;
 	
-	private Button button;
+	private GameButton button;
 	
 	
-	public gameViewManager() {
+	public GameViewManager() {
 			
 		InitializeStage();
 		createKeyListener();
@@ -33,10 +32,9 @@ public class gameViewManager{
 	
 	private void createButton() {
 
-		button = new Button();
-		button.setLayoutX(860);
-		button.setLayoutY(500);
-		button.setPrefSize(100, 100);
+		button = new GameButton("MAINMENU");
+		button.setLayoutX(770);
+		button.setLayoutY(555);
 		button.setOnMousePressed(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -60,11 +58,7 @@ public class gameViewManager{
 			@Override
 			public void handle(KeyEvent event) {
 				
-				if(event.getCode() == KeyCode.LEFT) {
-					
-				}else if(event.getCode() == KeyCode.RIGHT) {
-					
-				}else if(event.getCode() == KeyCode.UP) {
+				if(event.getCode() == KeyCode.UP) {
 					
 				}else if(event.getCode() == KeyCode.DOWN) {
 					
