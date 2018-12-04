@@ -44,7 +44,7 @@ public class GameViewManager extends ViewManager{
 
 		button = new GameButton("MAINMENU");
 		button.setLayoutX(770);
-		button.setLayoutY(555);
+		button.setLayoutY(0);
 		button.setOnMousePressed(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -103,7 +103,8 @@ public class GameViewManager extends ViewManager{
 		Canvas canvas = new Canvas(width,height);
 		gc = canvas.getGraphicsContext2D();
 		gamePane = new AnchorPane();
-		gamePane.getChildren().add(canvas);
+		gamePane.setStyle("-fx-background-color: aliceblue");
+		gamePane.getChildren().add(canvas); 
 		gameScene = new Scene(gamePane,width,height);
 		gameStage = new Stage();
 		gameStage.setScene(gameScene);
@@ -129,7 +130,6 @@ public class GameViewManager extends ViewManager{
 			public void handle(long currentNanoTime) {
 				double time = (currentNanoTime - startNanoTime) / 1000000000.0;
 				gc.clearRect(0, 0, width, height);
-				
 				gc.drawImage(playerCharacter.getState(),playerCharacter.getX(),playerCharacter.getY(),StickMan.WIDTH,StickMan.HEIGHT);
 				gc.fillRect(playerCharacter.getX(), playerCharacter.getY() - 10, playerCharacter.getHpBar(), 5);
 				gc.strokeText(playerCharacter.getName(), playerCharacter.getX() + 4.2*(7-playerCharacter.getName().length()), playerCharacter.getY() - 20);
