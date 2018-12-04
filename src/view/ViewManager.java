@@ -6,6 +6,8 @@ import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+//import javafx.scene.canvas.Canvas;
+//import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.DropShadow;
@@ -33,9 +35,10 @@ public class ViewManager {
 	private Stage mainStage;
 	
 	private static final int button_x = 100;
-	private static final int button_y = 120;
+	private static final int button_y = 80;
 	private List<GameButton> menuButtons;
-
+	private GameButton resumeButton;
+	
 	private String name = "";
 	
 	private subScene playSubScene;
@@ -43,6 +46,8 @@ public class ViewManager {
 	private subScene creditSubScene;
 	private subScene exitSubScene;
 	private subScene showSubScene;
+	
+	private GameViewManager gameViewManager;
 	
 	public ViewManager() {
 		
@@ -53,6 +58,8 @@ public class ViewManager {
 		mainStage.setScene(mainScene);
 		createButton();
 		createBackground();
+		//createCanvas();
+
 		createSubScene();
 		createLogo();
 		
@@ -60,7 +67,19 @@ public class ViewManager {
 		sub.setLayoutX(200);
 		sub.setLayoutY(100);
 		
+		
+		
 	}
+//	private void createCanvas() {
+//		Canvas a = new Canvas();
+//		GraphicsContext gc = a.getGraphicsContext2D();
+//		gc.rect(100, 100, 50, 50);
+//		a.setLayoutX(200);
+//		a.setLayoutY(300);
+//		a.setWidth(200);
+//		a.setHeight(100);
+//		mainPane.getChildren().add(a);
+//	}
 	
 	private void createSubScene() {
 		
@@ -99,8 +118,9 @@ public class ViewManager {
 				}else {
 					if(event.getButton().equals(MouseButton.PRIMARY)) {
 					
-					GameViewManager gameView = new GameViewManager();
-					gameView.hideMenuScene(mainStage);
+					gameViewManager = new GameViewManager();
+					gameViewManager.hideMenuScene(mainStage);
+					resumeButton.setDisable(false);
 					
 					}
 				}
@@ -112,6 +132,7 @@ public class ViewManager {
 		playSubScene.getRoot2().getChildren().add(label);
 		playSubScene.getRoot2().getChildren().add(enterName);
 		playSubScene.getRoot2().getChildren().add(enterButton);
+		
 	}
 	
 	public Stage getMainStage(){
@@ -142,7 +163,7 @@ public class ViewManager {
 		mainPane.getChildren().add(logo);
 	}
 	
-	private void addMenuButton(GameButton button) {
+	protected void addMenuButton(GameButton button) {
 		button.setLayoutX(button_x);
 		button.setLayoutY(button_y + menuButtons.size()*100);
 		menuButtons.add(button);
@@ -150,17 +171,38 @@ public class ViewManager {
 	}
 	
 	private void createButton() {
-		createStartButton();
+		createResumeButton();
+		createNewGameButton();
 		createHowToPlayButton();
 		createCreditButton();
 		createExitButton();
 	}
 	
-	private void createStartButton() {
-		GameButton startButton = new GameButton("Start");
-		addMenuButton(startButton);
+	private void createResumeButton() {
+		resumeButton = new GameButton("Resume");
+		resumeButton.setDisable(true);
+		addMenuButton(resumeButton);
 		
-		startButton.setOnAction(new EventHandler<ActionEvent>() {
+		resumeButton.setOnMousePressed(new EventHandler<MouseEvent>() {
+			
+			@Override
+			public void handle(MouseEvent event) {
+
+				if(event.getButton().equals(MouseButton.PRIMARY)) {
+				
+				gameViewManager.hideMenuScene(mainStage);
+								
+				}
+			}
+		
+		});
+	}
+	
+	private void createNewGameButton() {
+		GameButton newGameButton = new GameButton("New Game");
+		addMenuButton(newGameButton);
+		
+		newGameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				
@@ -244,5 +286,14 @@ public class ViewManager {
 		BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
 		mainPane.setBackground(new Background(background));
 	}
+	
+	public List<GameButton> getMenuButtons() {
+		return menuButtons;
+	}
+
+	public void setMenuButtons(List<GameButton> menuButtons) {
+		this.menuButtons = menuButtons;
+	}
+
 	
 }

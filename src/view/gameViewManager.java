@@ -10,7 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.GameButton;
 
-public class GameViewManager{
+public class GameViewManager extends ViewManager{
 
 	private static final int width = 960;
 	private static final int height = 600;
@@ -100,8 +100,6 @@ public class GameViewManager{
 		
 		gameStage.hide();
 		hideStage.show();
-		
-		
 		
 	}
 	
