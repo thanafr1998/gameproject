@@ -3,6 +3,7 @@ package view;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -24,6 +25,7 @@ import javafx.stage.Stage;
 import model.GameButton;
 import model.InfoLabel;
 import model.InputField;
+import model.StickMan;
 import model.subScene;
 
 public class ViewManager {
@@ -96,7 +98,7 @@ public class ViewManager {
 		playSubScene = new subScene();
 		InfoLabel label = new InfoLabel("Enter Your Name :");
 		GameButton enterButton = new GameButton("ENTER");
-		InputField enterName = new InputField("", "Enter Your Name");
+		InputField enterName = new InputField("", "Enter Name (max 7 characters)");
 		
 		enterName.setLayoutX(100);
 		enterName.setLayoutY(100);
@@ -113,15 +115,19 @@ public class ViewManager {
 				name = enterName.getText();
 				if(name.equals("")) {
 					Alert alert = new Alert(AlertType.ERROR);
-					alert.setContentText("Please Fill In Your Name");
+					alert.setContentText("Name cannot be blank");
 					alert.showAndWait();
-				}else {
+				}else if(name.length() > 7) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setContentText("Name is too long (max 7 characters)");
+					alert.showAndWait();
+				}
+				else {
 					if(event.getButton().equals(MouseButton.PRIMARY)) {
-					
-					gameViewManager = new GameViewManager();
-					gameViewManager.hideMenuScene(mainStage);
 					resumeButton.setDisable(false);
-					
+					gameViewManager = new GameViewManager(name);
+					gameViewManager.hideMenuScene(mainStage);
+
 					}
 				}
 			}
