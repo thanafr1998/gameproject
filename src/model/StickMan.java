@@ -3,11 +3,12 @@ package model;
 import java.util.ArrayList;
 
 import javafx.geometry.Insets;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import view.GameViewManager;
 
-public class StickMan extends ProgressBar{
+public class StickMan{
 	public static final Image IDLE = new Image("model/resources/IDLE.png");
 	public static final Image walkR1 = new Image("model/resources/WALK_RIGHT_1.png");
 	public static final Image walkR2 = new Image("model/resources/WALK_RIGHT_2.png");
@@ -24,43 +25,40 @@ public class StickMan extends ProgressBar{
 	public static final int KICK_DAMAGE = 40;
 	public static final int KICK_RANGE = 150;
 	public static final int MAX_HP = 1000;
+	public static final int WALK_SPEED = 3;
 
 	private String name; 
 	private Image state;
 	private boolean alive, idle, walking, jumping, attacking, blocking;
 	private int hp;
-	private int hpBar;
+	private double hpBar;
 	private int walkCounter;
-	private int X,Y;
+	private double X,Y;
 	
 	
 	public StickMan(String name) {
 		this.name = name;
-		Y = GameViewManager.height - 100;
+		Y = GameViewManager.height - HEIGHT;
 		X = 50;
 		hp = StickMan.MAX_HP;
-		hpBar = (int) ((double) (hp * WIDTH) / (double) StickMan.MAX_HP);
+		hpBar =  ((double) (hp * WIDTH) / (double) StickMan.MAX_HP);
 		state = IDLE;
-		alive = true;
-		idle = true;
-		walking = false;
-		jumping = false;
-		attacking = false;
-		blocking = false;
+		alive = true; idle = true;
+		walking = false; jumping = false; attacking = false; blocking = false;
 		walkCounter = 0;
 	}
 	public void punch(StickMan target) {
 		if(target.blocking) return;
 		target.hp -= StickMan.PUNCH_DAMAGE;
-		updateStatus();
+		updateHp();
 	}
 	
 	public void kick(StickMan target) {
 		target.hp -= StickMan.KICK_DAMAGE;
-		updateStatus();
+		updateHp();
 	}
 	
-	public void updateStatus() {
+	public void updateHp() {
 		if(hp <= 0) {
 			hpBar = 0;
 			alive = false;
@@ -77,7 +75,7 @@ public class StickMan extends ProgressBar{
 	}
 	
 	public void walkRight() {
-		X += 3;
+		X += WALK_SPEED;
 		if(X > GameViewManager.width - 60) X = GameViewManager.width - 60;
 		walking = true; idle = false; jumping = false; attacking = false; blocking = false;
 		state = toRight[walkCounter / 3];
@@ -85,7 +83,7 @@ public class StickMan extends ProgressBar{
 	}
 	
 	public void walkLeft() {
-		X -= 3;
+		X -= WALK_SPEED;
 		if(X < 0) X = 0;
 		walking = true; idle = false; jumping = false; attacking = false; blocking = false;
 		state = toLeft[walkCounter / 3];
@@ -130,19 +128,19 @@ public class StickMan extends ProgressBar{
 	public void setHp(int hp) {
 		this.hp = hp;
 	}
-	public int getX() {
+	public double getX() {
 		return X;
 	}
 	public void setX(int x) {
 		X = x;
 	}
-	public int getY() {
+	public double getY() {
 		return Y;
 	}
 	public void setY(int y) {
 		Y = y;
 	}
-	public int getHpBar() {
+	public double getHpBar() {
 		return hpBar;
 	}
 	public String getName() {
@@ -150,6 +148,12 @@ public class StickMan extends ProgressBar{
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void draw(GraphicsContext gc) {
+		gc.drawImage(state,X,Y,StickMan.WIDTH,StickMan.HEIGHT);
+		gc.fillRect(X, Y - 10, hpBar, 5);
+		gc.strokeText(name, X + 4.2*(7-name.length()), Y - 20);
 	}
 
 }

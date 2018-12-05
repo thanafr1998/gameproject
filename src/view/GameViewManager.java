@@ -1,5 +1,7 @@
 package view;
 
+import java.util.ArrayList;
+
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -15,6 +17,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import model.EnemyRed;
 import model.GameButton;
 import model.StickMan;
 
@@ -28,6 +31,8 @@ public class GameViewManager extends ViewManager{
 	private Stage hideStage;
 	private GraphicsContext gc;
 	private StickMan playerCharacter;
+	private ArrayList<EnemyRed> RedBot;
+	int lastAddRed;
 	
 	private GameButton button;
 	
@@ -37,7 +42,8 @@ public class GameViewManager extends ViewManager{
 		createKeyListener();
 		createButton();
 		playerCharacter = new StickMan(name);
-		
+		RedBot = new ArrayList<EnemyRed>();
+		lastAddRed = 0;
 	}
 
 	private void createButton() {
@@ -129,10 +135,20 @@ public class GameViewManager extends ViewManager{
 		new AnimationTimer() {
 			public void handle(long currentNanoTime) {
 				double time = (currentNanoTime - startNanoTime) / 1000000000.0;
+				if(((int) time) % 5 == 0 && (int) time != lastAddRed && RedBot.size() < 5) {
+					RedBot.add(new EnemyRed());
+					lastAddRed = (int) time;
+				}
 				gc.clearRect(0, 0, width, height);
-				gc.drawImage(playerCharacter.getState(),playerCharacter.getX(),playerCharacter.getY(),StickMan.WIDTH,StickMan.HEIGHT);
-				gc.fillRect(playerCharacter.getX(), playerCharacter.getY() - 10, playerCharacter.getHpBar(), 5);
-				gc.strokeText(playerCharacter.getName(), playerCharacter.getX() + 4.2*(7-playerCharacter.getName().length()), playerCharacter.getY() - 20);
+				for(int i = 0; i < RedBot.size(); i++) {
+					EnemyRed temp = RedBot.get(i);
+					if(temp.getActionEnd() <= time) {
+						temp.randomAction(time);
+					}
+					temp.act();
+					temp.draw(gc);
+				}
+				playerCharacter.draw(gc);
 				gc.strokeText(String.format("Time: %.2f", time),20,20);
 				
 			}
