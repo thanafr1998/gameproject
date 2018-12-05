@@ -60,7 +60,6 @@ public class ViewManager {
 		mainStage.setScene(mainScene);
 		createButton();
 		createBackground();
-		//createCanvas();
 
 		createSubScene();
 		createLogo();
@@ -69,19 +68,7 @@ public class ViewManager {
 		sub.setLayoutX(200);
 		sub.setLayoutY(100);
 		
-		
-		
 	}
-//	private void createCanvas() {
-//		Canvas a = new Canvas();
-//		GraphicsContext gc = a.getGraphicsContext2D();
-//		gc.rect(100, 100, 50, 50);
-//		a.setLayoutX(200);
-//		a.setLayoutY(300);
-//		a.setWidth(200);
-//		a.setHeight(100);
-//		mainPane.getChildren().add(a);
-//	}
 	
 	private void createSubScene() {
 		

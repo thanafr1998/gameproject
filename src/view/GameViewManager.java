@@ -33,6 +33,7 @@ public class GameViewManager extends ViewManager{
 	private StickMan playerCharacter;
 	private ArrayList<EnemyRed> RedBot;
 	int lastAddRed;
+	private Thread t;
 	
 	private GameButton button;
 	
@@ -79,6 +80,7 @@ public class GameViewManager extends ViewManager{
 				}else if(event.getCode() == KeyCode.RIGHT) {
 					playerCharacter.walkRight();
 				}else if(event.getCode() == KeyCode.UP) {
+					playerCharacter.jump();
 					//jump (if character is idle, this mode is able to kick only) HARD !! do later
 				}else if(event.getCode() == KeyCode.DOWN) {
 					//crouch (if character is idle, this mode is able to punch only)

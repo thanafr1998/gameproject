@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ProgressBar;
@@ -34,7 +35,9 @@ public class StickMan{
 	private double hpBar;
 	private int walkCounter;
 	private double X,Y;
-	
+
+	private int n;
+	private Thread t;
 	
 	public StickMan(String name) {
 		this.name = name;
@@ -88,6 +91,36 @@ public class StickMan{
 		walking = true; idle = false; jumping = false; attacking = false; blocking = false;
 		state = toLeft[walkCounter / 3];
 		walkCounter = (walkCounter + 1) % 9;
+	}
+	
+	public void jump() {
+		n = 30;
+		t = new Thread(() -> {
+			while(true) {
+				try {
+					Thread.sleep(15);
+					Platform.runLater(() -> {
+						if(n > 15) {
+							Y -= 1;
+							walking = false; idle = false; jumping = true; attacking = false; blocking = false;
+							walkCounter = (walkCounter + 1) % 9;
+							n--;
+						}else if(n == 0){
+								t.interrupt();	
+						}else if(n <= 15) {
+							Y += 1;
+							walking = false; idle = false; jumping = true; attacking = false; blocking = false;
+							walkCounter = (walkCounter + 1) % 9;
+							n--;
+						}
+					});
+				}catch(InterruptedException e){
+					break;
+				}
+			}
+		});
+		t.start();
+		
 	}
 	
 	public boolean isAlive() {
