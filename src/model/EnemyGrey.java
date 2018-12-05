@@ -4,14 +4,13 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import view.GameViewManager;
 
-public class EnemyRed {
-	
-	public static final Image[] toRight = {Character.RED_walkR1,Character.RED_walkR2,Character.RED_walkR3};
-	public static final Image[] toLeft = {Character.RED_walkL1,Character.RED_walkL2,Character.RED_walkL3};
-	public static final int PUNCH_DAMAGE = 120;
-	public static final int KICK_DAMAGE = 70;
-	public static final int MAX_HP = 200;
-	public static final double WALK_SPEED = 6.5;
+public class EnemyGrey {
+	public static final Image[] toRight = {Character.GREY_walkR1,Character.GREY_walkR2,Character.GREY_walkR3};
+	public static final Image[] toLeft = {Character.GREY_walkL1,Character.GREY_walkL2,Character.GREY_walkL3};
+	public static final int PUNCH_DAMAGE = 60;
+	public static final int KICK_DAMAGE = 30;
+	public static final int MAX_HP = 750;
+	public static final double WALK_SPEED = 1.0;
 	
 
 	private Image state;
@@ -24,10 +23,10 @@ public class EnemyRed {
 	private double actionDuration;
 	private double actionEnd;
 	
-	public EnemyRed() {
-		state = Character.RED_IDLE;
-		hp = EnemyRed.MAX_HP;
-		hpBar = ((double) (hp * Character.WIDTH) / (double) EnemyRed.MAX_HP);
+	public EnemyGrey() {
+		state = Character.GREY_IDLE;
+		hp = EnemyGrey.MAX_HP;
+		hpBar = ((double) (hp * Character.WIDTH) / (double) EnemyGrey.MAX_HP);
 		X = Math.random()*(GameViewManager.width - Character.WIDTH);
 		Y = GameViewManager.height - Character.HEIGHT;
 		alive = true; idle = true;
@@ -44,7 +43,7 @@ public class EnemyRed {
 			alive = false;
 		}
 		else {
-			hpBar = (int) ((double) (hp * Character.WIDTH) / (double) EnemyRed.MAX_HP);
+			hpBar = (int) ((double) (hp * Character.WIDTH) / (double) EnemyGrey.MAX_HP);
 		}
 	}
 	
@@ -52,16 +51,16 @@ public class EnemyRed {
 		X += WALK_SPEED;
 		if(X > GameViewManager.width - 60) X = GameViewManager.width - 60;
 		walking = true; idle = false; jumping = false; attacking = false; blocking = false;
-		state = toRight[walkCounter / 2];
-		walkCounter = (walkCounter + 1) % 6;
+		state = toRight[walkCounter / 6];
+		walkCounter = (walkCounter + 1) % 18;
 	}
 	
 	public void walkLeft() {
 		X -= WALK_SPEED;
 		if(X < 0) X = 0;
 		walking = true; idle = false; jumping = false; attacking = false; blocking = false;
-		state = toLeft[walkCounter / 2];
-		walkCounter = (walkCounter + 1) % 6;
+		state = toLeft[walkCounter / 6];
+		walkCounter = (walkCounter + 1) % 18;
 	}
 
 	public Image getState() {
@@ -86,7 +85,7 @@ public class EnemyRed {
 
 	public void setIdle(boolean idle) {
 		this.idle = idle;
-		state = Character.RED_IDLE;
+		state = Character.GREY_IDLE;
 		walkCounter = 0;
 		action = "";
 	}
@@ -172,19 +171,19 @@ public class EnemyRed {
 		double temp = (Math.random()*100.0) + 1.0;
 		if(temp > 0 && temp <= 60) {
 			action = "idle";
-			actionDuration = Math.random()*3.0 + 2.0;
+			actionDuration = Math.random() + 5.0;
 			actionEnd = startTime + actionDuration;
 			return;
 		}
 		else if(temp > 60 && temp <= 80) {
 			action = "walkLeft";
-			actionDuration = Math.random();
+			actionDuration = Math.random() + 2.0;
 			actionEnd = startTime + actionDuration;
 			return;
 		}
 		else if(temp > 80 && temp <= 100) {
 			action = "walkRight";
-			actionDuration = Math.random();
+			actionDuration = Math.random() + 2.0;
 			actionEnd = startTime + actionDuration;
 			return;
 		}
@@ -194,7 +193,7 @@ public class EnemyRed {
 	public void act() {
 
 		if(action.equals("idle")) {
-			state = Character.RED_IDLE;
+			state = Character.GREY_IDLE;
 			walkCounter = 0;
 		}
 		else if(action.equals("walkLeft")) {

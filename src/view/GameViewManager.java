@@ -17,6 +17,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import model.EnemyBlue;
+import model.EnemyGrey;
 import model.EnemyRed;
 import model.GameButton;
 import model.StickMan;
@@ -32,7 +34,10 @@ public class GameViewManager extends ViewManager{
 	private GraphicsContext gc;
 	private StickMan playerCharacter;
 	private ArrayList<EnemyRed> RedBot;
-	int lastAddRed;
+	private ArrayList<EnemyBlue> BlueBot;
+	private ArrayList<EnemyGrey> GreyBot;
+	int lastAddRed, lastAddBlue, lastAddGrey;
+	boolean redWasFilled, blueWasFilled, greyWasFilled;
 	private Thread t;
 	
 	private GameButton button;
@@ -44,7 +49,10 @@ public class GameViewManager extends ViewManager{
 		createButton();
 		playerCharacter = new StickMan(name);
 		RedBot = new ArrayList<EnemyRed>();
-		lastAddRed = 0;
+		BlueBot = new ArrayList<EnemyBlue>();
+		GreyBot = new ArrayList<EnemyGrey>();
+		lastAddRed = 0; lastAddBlue = 0; lastAddGrey = 0;
+		redWasFilled = false; blueWasFilled = false; greyWasFilled = false;
 	}
 
 	private void createButton() {
@@ -59,7 +67,6 @@ public class GameViewManager extends ViewManager{
 				if(event.getButton().equals(MouseButton.PRIMARY)) {
 					hideGameScene();
 				}
-				
 			}
 
 		});
@@ -80,7 +87,7 @@ public class GameViewManager extends ViewManager{
 				}else if(event.getCode() == KeyCode.RIGHT) {
 					playerCharacter.walkRight();
 				}else if(event.getCode() == KeyCode.UP) {
-					playerCharacter.jump();
+					if(!playerCharacter.isJumping()) playerCharacter.jump();
 					//jump (if character is idle, this mode is able to kick only) HARD !! do later
 				}else if(event.getCode() == KeyCode.DOWN) {
 					//crouch (if character is idle, this mode is able to punch only)
@@ -136,14 +143,46 @@ public class GameViewManager extends ViewManager{
 		gc.setFont(Font.font("Century", 15));
 		new AnimationTimer() {
 			public void handle(long currentNanoTime) {
+				gc.clearRect(0, 0, width, height);
 				double time = (currentNanoTime - startNanoTime) / 1000000000.0;
-				if(((int) time) % 5 == 0 && (int) time != lastAddRed && RedBot.size() < 5) {
-					RedBot.add(new EnemyRed());
+				//Add new Red enemy
+				if(((int) time) % 17 == 0 && (int) time != lastAddRed  && !redWasFilled) {
+					if(RedBot.size() < 5)  RedBot.add(new EnemyRed());
+					if(RedBot.size() == 5) redWasFilled = true;
 					lastAddRed = (int) time;
 				}
-				gc.clearRect(0, 0, width, height);
+				//Add new Blue enemy
+				if(((int) time) % 26 == 0 && (int) time != lastAddBlue  && !blueWasFilled) {
+					if(BlueBot.size() < 5)  BlueBot.add(new EnemyBlue());
+					if(BlueBot.size() == 5) blueWasFilled = true;
+					lastAddBlue = (int) time;
+				}//Add new Grey enemy
+				if(((int) time) % 10 == 0 && (int) time != lastAddGrey  && !greyWasFilled) {
+					if(GreyBot.size() < 10)  GreyBot.add(new EnemyGrey());
+					if(GreyBot.size() == 10) greyWasFilled = true;
+					lastAddGrey = (int) time;
+				}
+				//random action for red then draw
 				for(int i = 0; i < RedBot.size(); i++) {
 					EnemyRed temp = RedBot.get(i);
+					if(temp.getActionEnd() <= time) {
+						temp.randomAction(time);
+					}
+					temp.act();
+					temp.draw(gc);
+				}
+				//random action for blue then draw
+				for(int i = 0; i < BlueBot.size(); i++) {
+					EnemyBlue temp = BlueBot.get(i);
+					if(temp.getActionEnd() <= time) {
+						temp.randomAction(time);
+					}
+					temp.act();
+					temp.draw(gc);
+				}
+				//random action for red then draw
+				for(int i = 0; i < GreyBot.size(); i++) {
+					EnemyGrey temp = GreyBot.get(i);
 					if(temp.getActionEnd() <= time) {
 						temp.randomAction(time);
 					}
@@ -158,6 +197,7 @@ public class GameViewManager extends ViewManager{
 		}.start();
 		gameStage.show();
 	}
+
 	
 	private void hideGameScene() {
 		
@@ -198,5 +238,4 @@ public class GameViewManager extends ViewManager{
 		this.gc = gc;
 	}
 
-	
 }

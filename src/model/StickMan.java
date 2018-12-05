@@ -10,23 +10,13 @@ import javafx.scene.image.Image;
 import view.GameViewManager;
 
 public class StickMan{
-	public static final Image IDLE = new Image("model/resources/IDLE.png");
-	public static final Image walkR1 = new Image("model/resources/WALK_RIGHT_1.png");
-	public static final Image walkR2 = new Image("model/resources/WALK_RIGHT_2.png");
-	public static final Image walkR3 = new Image("model/resources/WALK_RIGHT_3.png");
-	public static final Image walkL1 = new Image("model/resources/WALK_LEFT_1.png");
-	public static final Image walkL2 = new Image("model/resources/WALK_LEFT_2.png");
-	public static final Image walkL3 = new Image("model/resources/WALK_LEFT_3.png");
-	public static final Image[] toRight = {walkR1,walkR2,walkR3};
-	public static final Image[] toLeft = {walkL1,walkL2,walkL3};
-	public static final int WIDTH = 60;
-	public static final int HEIGHT = 100;
+	
+	public static final Image[] toRight = {Character.walkR1,Character.walkR2,Character.walkR3};
+	public static final Image[] toLeft = {Character.walkL1,Character.walkL2,Character.walkL3};
 	public static final int PUNCH_DAMAGE = 75;
-	public static final int PUNCH_RANGE = 70;
 	public static final int KICK_DAMAGE = 40;
-	public static final int KICK_RANGE = 150;
 	public static final int MAX_HP = 1000;
-	public static final int WALK_SPEED = 3;
+	public static final double WALK_SPEED = 3.5;
 
 	private String name; 
 	private Image state;
@@ -41,11 +31,11 @@ public class StickMan{
 	
 	public StickMan(String name) {
 		this.name = name;
-		Y = GameViewManager.height - HEIGHT;
+		Y = GameViewManager.height - Character.HEIGHT;
 		X = 50;
 		hp = StickMan.MAX_HP;
-		hpBar =  ((double) (hp * WIDTH) / (double) StickMan.MAX_HP);
-		state = IDLE;
+		hpBar =  ((double) (hp * Character.WIDTH) / (double) StickMan.MAX_HP);
+		state = Character.IDLE;
 		alive = true; idle = true;
 		walking = false; jumping = false; attacking = false; blocking = false;
 		walkCounter = 0;
@@ -67,7 +57,7 @@ public class StickMan{
 			alive = false;
 		}
 		else {
-			hpBar = (int) ((double) (hp * WIDTH) / (double) StickMan.MAX_HP);
+			hpBar = (int) ((double) (hp * Character.WIDTH) / (double) StickMan.MAX_HP);
 		}
 	}
 	public void setState(Image newState) {
@@ -106,7 +96,7 @@ public class StickMan{
 							walkCounter = (walkCounter + 1) % 9;
 							n--;
 						}else if(n == 0){
-								t.interrupt();	
+							t.interrupt();	
 						}else if(n <= 15) {
 							Y += 1;
 							walking = false; idle = false; jumping = true; attacking = false; blocking = false;
@@ -134,7 +124,7 @@ public class StickMan{
 	}
 	public void setIdle() {
 		idle = true; walking = false; jumping = false; attacking = false; blocking = false;
-		state = IDLE;
+		state = Character.IDLE;
 		walkCounter = 0;
 	}
 	public boolean isWalking() {
@@ -184,7 +174,7 @@ public class StickMan{
 	}
 	
 	public void draw(GraphicsContext gc) {
-		gc.drawImage(state,X,Y,StickMan.WIDTH,StickMan.HEIGHT);
+		gc.drawImage(state,X,Y,Character.WIDTH,Character.HEIGHT);
 		gc.fillRect(X, Y - 10, hpBar, 5);
 		gc.strokeText(name, X + 4.2*(7-name.length()), Y - 20);
 	}
