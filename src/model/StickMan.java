@@ -30,7 +30,7 @@ public class StickMan{
 	private int actionCounter;
 	private double X,Y;
 	
-	private boolean atFloor,down;
+	private boolean jump,down;
 	private int n;
 	private Thread t;
 	
@@ -132,54 +132,47 @@ public class StickMan{
 	}
 	
 	public void jump() {
-		if(down) return;
-		n = 450;
-		atFloor = false;
 		jumping = true;
+		n = 450;
+		jump = false;
 		state = Character.JUMP;
 		t = new Thread(() -> {
 			while(true) {
 				try {
 					Thread.sleep(1);
-					if(atFloor == false){
+					if(jump == false){
 						if(n > 225) {
 							Y -= 1;
 							walking = false; idle = false; jumping = true; attacking = false; blocking = false;
 							actionCounter = (actionCounter + 1) % 9;
 							n--;
-							atFloor = false;
 						}else if(n == 225) {
 							Y += 1;
 							walking = false; idle = false; jumping = true; attacking = false; blocking = false;
 							actionCounter = (actionCounter + 1) % 9;
 							n--;
-							atFloor = true;
+							jump = true;
 							state = Character.IDLE;
 						}
 					}else {
 						if(Y == 300 || Y == 100) {
-							jumping = false;
-							t.interrupt();;
+							state = Character.IDLE;
+							t.interrupt();
 						}else if(n < 225) {
 							Y += 1;
 							walking = false; idle = false; jumping = true; attacking = false; blocking = false;
-							actionCounter = (actionCounter + 1) % 9;								n--;
-							atFloor = true;
+							actionCounter = (actionCounter + 1) % 9;							
+							n--;
 							state = Character.IDLE;
-						}else if(n == 0){
-							jumping = false;
-							atFloor = true;
-							state = Character.IDLE;
-							t.interrupt();	
 						}
 					}
 				}catch(InterruptedException e){
+					jumping = false;
 					break;
 				}
 			}
 		});
 		t.start();
-		
 	}
 	
 	public void crouch() {
@@ -187,43 +180,27 @@ public class StickMan{
 	}
 	
 	public void down() {
-		state = Character.JUMP;
-		if(jumping) return;
-		if(down) return;
-		n = 200;
 		down = true;
+		n = 200;
 		t = new Thread(() -> {
 			while(true) {
 				try {
 					Thread.sleep(1);
 					if(Y < 480) {
-						if(!down) {
+						if(n > 0) {
 							Y += 1;
-							walking = false; idle = false; jumping = false; attacking = false; blocking = false;
+							walking = false; idle = false; attacking = false; blocking = false;
 							actionCounter = (actionCounter + 1) % 9;
 							n--;
-							atFloor = false;
-							down = true;
-						}else if(n > 0) {
-							Y += 1;
-							walking = false; idle = false; jumping = false; attacking = false; blocking = false;
-							actionCounter = (actionCounter + 1) % 9;
-							n--;
-							atFloor = false;
 							down = true;
 						}else {
-							atFloor = true;
-							down = false;
-							state = Character.IDLE;
 							t.interrupt();
 						}
 					}else if(Y >= 480) {
-						down = false;
-						atFloor = true;
-						state = Character.IDLE;
 						t.interrupt();
 					}
 				}catch(InterruptedException e){
+					down = false;
 					break;
 				}
 			}
@@ -241,7 +218,7 @@ public class StickMan{
 		return idle;
 	}
 	public void setIdle() {
-		idle = true; walking = false; jumping = false; attacking = false; blocking = false;
+		idle = true; walking = false; attacking = false; blocking = false;
 		state = Character.IDLE;
 		actionCounter = 0;
 	}
@@ -249,8 +226,8 @@ public class StickMan{
 		return walking;
 	}
 	public void setWalking(boolean walking) {
-		if(walking) { this.walking = true; idle = false; jumping = false; this.attacking = false; blocking = false;}
-		else { this.walking = false; idle = false; jumping = false; this.attacking = false; blocking = false; }
+		if(walking) { this.walking = true; idle = false; this.attacking = false; blocking = false;}
+		else { this.walking = false; idle = false; this.attacking = false; blocking = false; }
 	}
 	public boolean isJumping() {
 		return jumping;
@@ -258,12 +235,15 @@ public class StickMan{
 	public void setJumping(boolean jumping) {
 		this.jumping = jumping;
 	}
+	public boolean isDowning() {
+		return down;
+	}
 	public boolean isAttacking() {
 		return attacking;
 	}
 	public void setAttacking(boolean attacking) {
-		if(attacking) { walking = false; idle = false; jumping = false; this.attacking = true; blocking = false;}
-		else { walking = false; idle = true; jumping = false; this.attacking = false; blocking = false; }
+		if(attacking) { walking = false; idle = false; this.attacking = true; blocking = false;}
+		else { walking = false; idle = true; this.attacking = false; blocking = false; }
 	}
 	public int getHp() {
 		return hp;
@@ -294,6 +274,7 @@ public class StickMan{
 	}
 	
 	public void draw(GraphicsContext gc) {
+	
 		gc.drawImage(state,X,Y,Character.WIDTH,Character.HEIGHT);
 		gc.fillRoundRect(X, Y - 10, hpBar, 5, 5, 5);
 		gc.strokeText(name, X + 4.2*(7-name.length()), Y - 20);
