@@ -15,8 +15,8 @@ public class StickMan{
 	public static final Image[] toLeft = {Character.walkL1,Character.walkL2,Character.walkL3};
 	public static final Image[] punchLeft = {Character.punchL1,Character.punchL2};
 	public static final Image[] punchRight = {Character.punchR1,Character.punchR2};
-	public static final Image[] C_punchLeft = {Character.C_punchL1,Character.C_punchL2};
-	public static final Image[] C_punchRight = {Character.C_punchR1,Character.C_punchR2};
+	public static final Image[] kickLeft = {Character.kickL1,Character.kickL2};
+	public static final Image[] kickRight = {Character.kickR1,Character.kickR2};
 	public static final int PUNCH_DAMAGE = 75;
 	public static final int KICK_DAMAGE = 40;
 	public static final int MAX_HP = 1000;
