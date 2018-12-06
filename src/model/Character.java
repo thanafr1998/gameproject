@@ -6,8 +6,7 @@ import view.GameViewManager;
 public class Character {
 	public static final int WIDTH = 60;
 	public static final int HEIGHT = 100;
-	public static final int PUNCH_RANGE = 75;
-	public static final int KICK_RANGE = 150;
+	public static final int ATTACK_RANGE = 70;
 	public static final int[] FLOOR_LEVEL = {GameViewManager.height - 120,GameViewManager.height - 300,GameViewManager.height - 500};
 	
 	public static final Image SOLID_GREY = new Image("model/resources/SOLID_GREY.png");

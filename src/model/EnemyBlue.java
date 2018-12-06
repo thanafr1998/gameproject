@@ -221,4 +221,11 @@ public class EnemyBlue {
 	public String getAction() {
 		return action;
 	}
+	
+	public void takeDamage(int damage) {
+		damage -= ARMOR;
+		if(damage < 0) damage = 0;
+		this.hp -= damage;
+		updateHp();
+	}
 }

@@ -219,4 +219,9 @@ public class EnemyGrey {
 	public String getAction() {
 		return action;
 	}
+	
+	public void takeDamage(int damage) {
+		this.hp -= damage;
+		updateHp();
+	}
 }
