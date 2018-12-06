@@ -18,12 +18,12 @@ public class EnemyBlue {
 	public static final double WALK_SPEED = 0.3;
 	public static final int ARMOR = 30;
 	
-
+	private Thread t;
 	private Image state;
 	private boolean alive, idle, walking, jumping, attacking, blocking;
-	private int hp;
+	private int hp, nextAttackTime;
 	private double hpBar;
-	private int walkCounter;
+	private int actionCounter;
 	private double X,Y;
 	private String action;
 	private double actionDuration;
@@ -37,7 +37,7 @@ public class EnemyBlue {
 		Y = Character.FLOOR_LEVEL[(int) (Math.random()*3.0)];
 		alive = true; idle = true;
 		walking = false; jumping = false; attacking = false; blocking = false;
-		walkCounter = 0;
+		actionCounter = 0;
 		action = "";
 		actionDuration = 0;
 		actionEnd = 0;
@@ -53,20 +53,53 @@ public class EnemyBlue {
 		}
 	}
 	
+	public void kickRight() {
+		walking = false; idle = false; jumping = false; attacking = true; blocking = false;
+		if(actionCounter == 2) {
+			this.setIdle(); return;
+		}
+		else state = kickRight[actionCounter];
+		actionCounter++;
+	}
+	public void kickLeft() {
+		walking = false; idle = false; jumping = false; attacking = true; blocking = false;
+		if(actionCounter == 2) {
+			this.setIdle(); return;
+		}
+		else state = kickLeft[actionCounter];
+		actionCounter++;
+	}
+	public void punchLeft() {
+		walking = false; idle = false; jumping = false; attacking = true; blocking = false;
+		if(actionCounter == 2) {
+			this.setIdle(); return;
+		}
+		else state = punchLeft[actionCounter];
+		actionCounter++;
+	}
+	public void punchRight() {
+		walking = false; idle = false; jumping = false; attacking = true; blocking = false;
+		if(actionCounter == 2) {
+			this.setIdle(); return;
+		}
+		else state = punchRight[actionCounter];
+		actionCounter++;
+	}
+	
 	public void walkRight() {
 		X += WALK_SPEED;
 		if(X > GameViewManager.width - 60) X = GameViewManager.width - 60;
 		walking = true; idle = false; jumping = false; attacking = false; blocking = false;
-		state = toRight[walkCounter / 10];
-		walkCounter = (walkCounter + 1) % 30;
+		state = toRight[actionCounter / 10];
+		actionCounter = (actionCounter + 1) % 30;
 	}
 	
 	public void walkLeft() {
 		X -= WALK_SPEED;
 		if(X < 0) X = 0;
 		walking = true; idle = false; jumping = false; attacking = false; blocking = false;
-		state = toLeft[walkCounter / 10];
-		walkCounter = (walkCounter + 1) % 30;
+		state = toLeft[actionCounter / 10];
+		actionCounter = (actionCounter + 1) % 30;
 	}
 
 	public Image getState() {
@@ -92,7 +125,7 @@ public class EnemyBlue {
 	public void setIdle() {
 		idle = true; walking = false; jumping = false; attacking = false; blocking = false;
 		state = Character.BLUE_IDLE;
-		walkCounter = 0;
+		actionCounter = 0;
 		action = "";
 	}
 
@@ -147,11 +180,11 @@ public class EnemyBlue {
 	}
 
 	public int getWalkCounter() {
-		return walkCounter;
+		return actionCounter;
 	}
 
-	public void setWalkCounter(int walkCounter) {
-		this.walkCounter = walkCounter;
+	public void setWalkCounter(int actionCounter) {
+		this.actionCounter = actionCounter;
 	}
 
 	public double getX() {
@@ -174,6 +207,81 @@ public class EnemyBlue {
 		gc.drawImage(this.state, X, Y, Character.WIDTH, Character.HEIGHT);
 		gc.fillRoundRect(X, Y - 10, hpBar, 5, 5, 5);
 	}
+	
+	public void randomAttackLeft(StickMan sm, int attackTime) {
+		if(attackTime < nextAttackTime) return;
+		nextAttackTime = attackTime + Character.ATTACK_COOLDOWN;
+		double val = Math.random()*100.0;
+		if(val < 40.0) {
+			this.setIdle();
+		}else if(val < 70.0) { //kick left
+			sm.takeDamage(KICK_DAMAGE);
+			t = new Thread(() -> {
+				try {
+					kickLeft();
+					Thread.sleep(100);
+					kickLeft();
+					Thread.sleep(100);
+					setIdle();
+				}catch(Exception e) {
+					setIdle();
+				}
+			});
+			t.start();
+		}else if(val < 100.0) { //punch left
+			sm.takeDamage(PUNCH_DAMAGE);
+			t = new Thread(() -> {
+				try {
+					punchLeft();
+					Thread.sleep(100);
+					punchLeft();
+					Thread.sleep(100);
+					setIdle();
+				}catch(Exception e) {
+					setIdle();
+				}
+			});
+			t.start();
+		}
+	}
+	
+	public void randomAttackRight(StickMan sm, int attackTime) {
+		if(attackTime < nextAttackTime) return;
+		nextAttackTime = attackTime + Character.ATTACK_COOLDOWN;
+		double val = Math.random()*100.0;
+		if(val < 40.0) {
+			this.setIdle();
+		}else if(val < 70.0) { //kick right
+			sm.takeDamage(KICK_DAMAGE);
+			t = new Thread(() -> {
+				try {
+					kickRight();
+					Thread.sleep(100);
+					kickRight();
+					Thread.sleep(100);
+					setIdle();
+				}catch(Exception e) {
+					setIdle();
+				}
+			});
+			t.start();
+		}else if(val < 100.0) { //punch right
+			sm.takeDamage(PUNCH_DAMAGE);
+			t = new Thread(() -> {
+				try {
+					punchRight();
+					Thread.sleep(100);
+					punchRight();
+					Thread.sleep(100);
+					setIdle();
+				}catch(Exception e) {
+					setIdle();
+				}
+			});
+			t.start();
+		}
+	}
+
 	
 	public void randomAction(double startTime) {
 		this.setIdle();
@@ -209,12 +317,12 @@ public class EnemyBlue {
 
 		if(action.equals("idle")) {
 			state = Character.BLUE_IDLE;
-			walkCounter = 0;
+			actionCounter = 0;
 		}
 		else if(action.equals("block")){
 			blocking = true;
 			state = Character.BLUE_BLOCK;
-			walkCounter = 0;
+			actionCounter = 0;
 		}
 		else if(action.equals("walkLeft")) {
 			walkLeft();

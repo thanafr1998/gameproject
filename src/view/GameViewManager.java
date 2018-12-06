@@ -100,9 +100,9 @@ public class GameViewManager extends ViewManager{
 					t = new Thread(() -> {
 						try {
 							playerCharacter.punchLeft();
-							Thread.sleep(50);
+							Thread.sleep(100);
 							playerCharacter.punchLeft();
-							Thread.sleep(50);
+							Thread.sleep(100);
 							playerCharacter.setIdle();
 						}catch(Exception e) {
 							playerCharacter.setIdle();
@@ -139,9 +139,9 @@ public class GameViewManager extends ViewManager{
 					t = new Thread(() -> {
 						try {
 							playerCharacter.punchRight();
-							Thread.sleep(50);
+							Thread.sleep(100);
 							playerCharacter.punchRight();
-							Thread.sleep(50);
+							Thread.sleep(100);
 							playerCharacter.setIdle();
 						}catch(Exception e) {
 							playerCharacter.setIdle();
@@ -178,9 +178,9 @@ public class GameViewManager extends ViewManager{
 					t = new Thread(() -> {
 						try {
 							playerCharacter.kickLeft();
-							Thread.sleep(50);
+							Thread.sleep(100);
 							playerCharacter.kickLeft();
-							Thread.sleep(50);
+							Thread.sleep(100);
 							playerCharacter.setIdle();
 						}catch(Exception e) {
 							playerCharacter.setIdle();
@@ -217,9 +217,9 @@ public class GameViewManager extends ViewManager{
 					t = new Thread(() -> {
 						try {
 							playerCharacter.kickRight();
-							Thread.sleep(50);
+							Thread.sleep(100);
 							playerCharacter.kickRight();
-							Thread.sleep(50);
+							Thread.sleep(100);
 							playerCharacter.setIdle();
 						}catch(Exception e) {
 							playerCharacter.setIdle();
@@ -364,8 +364,23 @@ public class GameViewManager extends ViewManager{
 				//random action for red then draw
 				for(int i = 0; i < RedBot.size(); i++) {
 					EnemyRed temp = RedBot.get(i);
-					if(temp.getActionEnd() <= time) {
-						temp.randomAction(time);
+					if(temp.getY() == playerCharacter.getY()) {
+						double diffL = temp.getX() - playerCharacter.getX();
+						double diffR = playerCharacter.getX() - temp.getX();
+						if(diffL > 0 && diffL <= Character.ATTACK_RANGE) {
+							temp.randomAttackLeft(playerCharacter, (int) time);
+						}else if(diffR > 0 && diffR <= Character.ATTACK_RANGE) {
+							temp.randomAttackRight(playerCharacter, (int) time);
+						}else {
+							if(temp.getActionEnd() <= time) {
+								temp.randomAction(time);
+							}
+						}
+					}
+					else{
+						if(temp.getActionEnd() <= time) {
+							temp.randomAction(time);
+						}
 					}
 					temp.act();
 					temp.draw(gc);
@@ -373,17 +388,47 @@ public class GameViewManager extends ViewManager{
 				//random action for blue then draw
 				for(int i = 0; i < BlueBot.size(); i++) {
 					EnemyBlue temp = BlueBot.get(i);
-					if(temp.getActionEnd() <= time) {
-						temp.randomAction(time);
+					if(temp.getY() == playerCharacter.getY()) {
+						double diffL = temp.getX() - playerCharacter.getX();
+						double diffR = playerCharacter.getX() - temp.getX();
+						if(diffL > 0 && diffL <= Character.ATTACK_RANGE) {
+							temp.randomAttackLeft(playerCharacter, (int) time);
+						}else if(diffR > 0 && diffR <= Character.ATTACK_RANGE) {
+							temp.randomAttackRight(playerCharacter, (int) time);
+						}else {
+							if(temp.getActionEnd() <= time) {
+								temp.randomAction(time);
+							}
+						}
+					}
+					else{
+						if(temp.getActionEnd() <= time) {
+							temp.randomAction(time);
+						}
 					}
 					temp.act();
 					temp.draw(gc);
 				}
-				//random action for red then draw
+				//random action for grey then draw
 				for(int i = 0; i < GreyBot.size(); i++) {
 					EnemyGrey temp = GreyBot.get(i);
-					if(temp.getActionEnd() <= time) {
-						temp.randomAction(time);
+					if(temp.getY() == playerCharacter.getY()) {
+						double diffL = temp.getX() - playerCharacter.getX();
+						double diffR = playerCharacter.getX() - temp.getX();
+						if(diffL > 0 && diffL <= Character.ATTACK_RANGE) {
+							temp.randomAttackLeft(playerCharacter, (int) time);
+						}else if(diffR > 0 && diffR <= Character.ATTACK_RANGE) {
+							temp.randomAttackRight(playerCharacter, (int) time);
+						}else {
+							if(temp.getActionEnd() <= time) {
+								temp.randomAction(time);
+							}
+						}
+					}
+					else{
+						if(temp.getActionEnd() <= time) {
+							temp.randomAction(time);
+						}
 					}
 					temp.act();
 					temp.draw(gc);

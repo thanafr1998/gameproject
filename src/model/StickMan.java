@@ -67,6 +67,12 @@ public class StickMan{
 		target.takeDamage(StickMan.KICK_DAMAGE);
 	}
 	
+	public void takeDamage(int dmg) {
+		if(this.isBlocking()) return;
+		if(dmg < 0) dmg = 0;
+		this.hp -= dmg;
+		this.updateHp();
+	}
 	public void updateHp() {
 		if(hp <= 0) {
 			hpBar = 0;
@@ -290,6 +296,13 @@ public class StickMan{
 		gc.drawImage(state,X,Y,Character.WIDTH,Character.HEIGHT);
 		gc.fillRoundRect(X, Y - 10, hpBar, 5, 5, 5);
 		gc.strokeText(name, X + 4.2*(7-name.length()), Y - 20);
+	}
+	public boolean isBlocking() {
+		return blocking;
+	}
+	public void setBlocking(boolean blocking) {
+		this.blocking = blocking;
+		walking = false; idle = false; jumping = false; attacking = false; down = false; jump = false;
 	}
 
 }
