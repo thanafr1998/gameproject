@@ -113,6 +113,30 @@ public class GameViewManager extends ViewManager{
 						}
 					});
 					t.start();
+					for(int i = GreyBot.size() - 1; i >= 0 ; i--) {
+						if(GreyBot.get(i).getY() != playerCharacter.getY()) continue;
+						double diff = playerCharacter.getX() - GreyBot.get(i).getX();
+						if(diff > 0.0 && diff < Character.ATTACK_RANGE) {
+							playerCharacter.punch(GreyBot.get(i));
+							if(!GreyBot.get(i).isAlive()) GreyBot.remove(i);
+						}
+					}
+					for(int i = RedBot.size() - 1; i >= 0 ; i--) {
+						if(RedBot.get(i).getY() != playerCharacter.getY()) continue;
+						double diff = playerCharacter.getX() - RedBot.get(i).getX();
+						if(diff > 0.0 && diff < Character.ATTACK_RANGE) {
+							playerCharacter.punch(RedBot.get(i));
+							if(!RedBot.get(i).isAlive()) RedBot.remove(i);
+						}
+					}
+					for(int i = BlueBot.size() - 1; i >= 0 ; i--) {
+						if(BlueBot.get(i).getY() != playerCharacter.getY()) continue;
+						double diff = playerCharacter.getX() - BlueBot.get(i).getX();
+						if(diff > 0.0 && diff < Character.ATTACK_RANGE) {
+							playerCharacter.punch(BlueBot.get(i));
+							if(!BlueBot.get(i).isAlive()) BlueBot.remove(i);
+						}
+					}
 				}else if(input.contains("RIGHT") && input.contains("A") && !playerCharacter.isAttacking() && !attacked) {
 					attacked = true;
 					playerCharacter.setAttacking(true);
@@ -128,6 +152,30 @@ public class GameViewManager extends ViewManager{
 						}
 					});
 					t.start();
+					for(int i = GreyBot.size() - 1; i >= 0 ; i--) {
+						if(GreyBot.get(i).getY() != playerCharacter.getY()) continue;
+						double diff = GreyBot.get(i).getX() - playerCharacter.getX();
+						if(diff > 0.0 && diff < Character.ATTACK_RANGE) {
+							playerCharacter.punch(GreyBot.get(i));
+							if(!GreyBot.get(i).isAlive()) GreyBot.remove(i);
+						}
+					}
+					for(int i = RedBot.size() - 1; i >= 0 ; i--) {
+						if(RedBot.get(i).getY() != playerCharacter.getY()) continue;
+						double diff = RedBot.get(i).getX() - playerCharacter.getX();
+						if(diff > 0.0 && diff < Character.ATTACK_RANGE) {
+							playerCharacter.punch(RedBot.get(i));
+							if(!RedBot.get(i).isAlive()) RedBot.remove(i);
+						}
+					}
+					for(int i = BlueBot.size() - 1; i >= 0 ; i--) {
+						if(BlueBot.get(i).getY() != playerCharacter.getY()) continue;
+						double diff = BlueBot.get(i).getX() - playerCharacter.getX();
+						if(diff > 0.0 && diff < Character.ATTACK_RANGE) {
+							playerCharacter.punch(BlueBot.get(i));
+							if(!BlueBot.get(i).isAlive()) BlueBot.remove(i);
+						}
+					}
 				}if(input.contains("LEFT") && input.contains("S") && !playerCharacter.isAttacking() && !attacked) {
 					playerCharacter.setAttacking(true);
 					attacked = true;
@@ -290,6 +338,7 @@ public class GameViewManager extends ViewManager{
 					temp.act();
 					temp.draw(gc);
 				}
+				
 				playerCharacter.draw(gc);
 				gc.strokeText(String.format("Time: %.2f", time),20,20);
 				

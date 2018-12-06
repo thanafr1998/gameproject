@@ -220,4 +220,9 @@ public class EnemyRed {
 	public String getAction() {
 		return action;
 	}
+	
+	public void takeDamage(int damage) {
+		this.hp -= damage;
+		updateHp();
+	}
 }

@@ -45,10 +45,17 @@ public class StickMan{
 		walking = false; jumping = false; attacking = false; blocking = false;
 		actionCounter = 0;
 	}
-	public void punch(StickMan target) {
-		if(target.blocking) return;
-		target.hp -= StickMan.PUNCH_DAMAGE;
-		updateHp();
+	public void punch(EnemyGrey target) {
+		if(target.isBlocking()) return;
+		target.takeDamage(StickMan.PUNCH_DAMAGE);
+	}
+	public void punch(EnemyRed target) {
+		if(target.isBlocking()) return;
+		target.takeDamage(StickMan.PUNCH_DAMAGE);
+	}
+	public void punch(EnemyBlue target) {
+		if(target.isBlocking()) return;
+		target.takeDamage(StickMan.PUNCH_DAMAGE);
 	}
 	
 	public void kick(StickMan target) {
