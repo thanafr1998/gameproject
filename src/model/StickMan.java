@@ -11,12 +11,12 @@ import view.GameViewManager;
 
 public class StickMan{
 	
-	public static final Image[] toRight = {Character.walkR1,Character.walkR2,Character.walkR3};
-	public static final Image[] toLeft = {Character.walkL1,Character.walkL2,Character.walkL3};
-	public static final Image[] punchLeft = {Character.punchL1,Character.punchL2};
-	public static final Image[] punchRight = {Character.punchR1,Character.punchR2};
-	public static final Image[] kickLeft = {Character.kickL1,Character.kickL2};
-	public static final Image[] kickRight = {Character.kickR1,Character.kickR2};
+	private static final Image[] toRight = {Character.walkR1,Character.walkR2,Character.walkR3};
+	private static final Image[] toLeft = {Character.walkL1,Character.walkL2,Character.walkL3};
+	private static final Image[] punchLeft = {Character.punchL1,Character.punchL2};
+	private static final Image[] punchRight = {Character.punchR1,Character.punchR2};
+	private static final Image[] kickLeft = {Character.kickL1,Character.kickL2};
+	private static final Image[] kickRight = {Character.kickR1,Character.kickR2};
 	public static final int PUNCH_DAMAGE = 75;
 	public static final int KICK_DAMAGE = 40;
 	public static final int MAX_HP = 1000;
@@ -57,10 +57,14 @@ public class StickMan{
 		if(target.isBlocking()) return;
 		target.takeDamage(StickMan.PUNCH_DAMAGE);
 	}
-	
-	public void kick(StickMan target) {
-		target.hp -= StickMan.KICK_DAMAGE;
-		updateHp();
+	public void kick(EnemyGrey target) {
+		target.takeDamage(StickMan.KICK_DAMAGE);
+	}
+	public void kick(EnemyRed target) {
+		target.takeDamage(StickMan.KICK_DAMAGE);
+	}
+	public void kick(EnemyBlue target) {
+		target.takeDamage(StickMan.KICK_DAMAGE);
 	}
 	
 	public void updateHp() {
@@ -79,6 +83,11 @@ public class StickMan{
 		return state;
 	}
 	
+	public void block() {
+		walking = false; idle = false; jumping = false; attacking = false; blocking = true;
+		state = Character.BLOCK;
+		actionCounter = 0;
+	}
 	public void walkRight() {
 		X += WALK_SPEED;
 		if(X > GameViewManager.width - 60) X = GameViewManager.width - 60;
@@ -218,7 +227,7 @@ public class StickMan{
 		return idle;
 	}
 	public void setIdle() {
-		idle = true; walking = false; attacking = false; blocking = false;
+		idle = true; walking = false; attacking = false; blocking = false; jump = false; jumping = false; down = false;
 		state = Character.IDLE;
 		actionCounter = 0;
 	}
@@ -272,7 +281,6 @@ public class StickMan{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
 	public void draw(GraphicsContext gc) {
 	
 		gc.drawImage(state,X,Y,Character.WIDTH,Character.HEIGHT);

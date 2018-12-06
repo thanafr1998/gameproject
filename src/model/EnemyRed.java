@@ -8,6 +8,10 @@ public class EnemyRed {
 	
 	public static final Image[] toRight = {Character.RED_walkR1,Character.RED_walkR2,Character.RED_walkR3};
 	public static final Image[] toLeft = {Character.RED_walkL1,Character.RED_walkL2,Character.RED_walkL3};
+	private static final Image[] punchLeft = {Character.RED_punchL1,Character.RED_punchL2};
+	private static final Image[] punchRight = {Character.RED_punchR1,Character.RED_punchR2};
+	private static final Image[] kickLeft = {Character.RED_kickL1,Character.RED_kickL2};
+	private static final Image[] kickRight = {Character.RED_kickR1,Character.RED_kickR2};
 	public static final int PUNCH_DAMAGE = 120;
 	public static final int KICK_DAMAGE = 70;
 	public static final int MAX_HP = 200;
@@ -170,8 +174,14 @@ public class EnemyRed {
 	
 	public void randomAction(double startTime) {
 		double temp = (Math.random()*100.0) + 1.0;
-		if(temp > 0 && temp <= 60) {
+		if(temp > 0 && temp <= 30) {
 			action = "idle";
+			actionDuration = Math.random()*3.0 + 2.0;
+			actionEnd = startTime + actionDuration;
+			return;
+		}
+		else if(temp > 30 && temp <= 60) {
+			action = "block";
 			actionDuration = Math.random()*3.0 + 2.0;
 			actionEnd = startTime + actionDuration;
 			return;
@@ -202,6 +212,11 @@ public class EnemyRed {
 		}
 		else if(action.equals("walkRight")) {
 			walkRight();
+		}
+		else if(action.equals("block")) {
+			blocking = true; 
+			state = Character.RED_BLOCK;
+			walkCounter = 0;
 		}
 	}
 	

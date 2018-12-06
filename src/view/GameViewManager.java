@@ -10,8 +10,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -191,6 +189,30 @@ public class GameViewManager extends ViewManager{
 						}
 					});
 					t.start();
+					for(int i = GreyBot.size() - 1; i >= 0 ; i--) {
+						if(GreyBot.get(i).getY() != playerCharacter.getY()) continue;
+						double diff = playerCharacter.getX() - GreyBot.get(i).getX();
+						if(diff > 0.0 && diff < Character.ATTACK_RANGE) {
+							playerCharacter.kick(GreyBot.get(i));
+							if(!GreyBot.get(i).isAlive()) GreyBot.remove(i);
+						}
+					}
+					for(int i = RedBot.size() - 1; i >= 0 ; i--) {
+						if(RedBot.get(i).getY() != playerCharacter.getY()) continue;
+						double diff = playerCharacter.getX() - RedBot.get(i).getX();
+						if(diff > 0.0 && diff < Character.ATTACK_RANGE) {
+							playerCharacter.kick(RedBot.get(i));
+							if(!RedBot.get(i).isAlive()) RedBot.remove(i);
+						}
+					}
+					for(int i = BlueBot.size() - 1; i >= 0 ; i--) {
+						if(BlueBot.get(i).getY() != playerCharacter.getY()) continue;
+						double diff = playerCharacter.getX() - BlueBot.get(i).getX();
+						if(diff > 0.0 && diff < Character.ATTACK_RANGE) {
+							playerCharacter.kick(BlueBot.get(i));
+							if(!BlueBot.get(i).isAlive()) BlueBot.remove(i);
+						}
+					}
 				}else if(input.contains("RIGHT") && input.contains("S") && !playerCharacter.isAttacking() && !attacked) {
 					attacked = true;
 					playerCharacter.setAttacking(true);
@@ -206,18 +228,44 @@ public class GameViewManager extends ViewManager{
 						}
 					});
 					t.start();
-				}else if(input.contains("UP") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
-					playerCharacter.jump();
-				}else if(input.contains("DOWN")  && !playerCharacter.isJumping() && !playerCharacter.isDowning()){
-					playerCharacter.crouch();
-				}else if(input.contains("X") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
-					playerCharacter.down();
+					for(int i = GreyBot.size() - 1; i >= 0 ; i--) {
+						if(GreyBot.get(i).getY() != playerCharacter.getY()) continue;
+						double diff = GreyBot.get(i).getX() - playerCharacter.getX();
+						if(diff > 0.0 && diff < Character.ATTACK_RANGE) {
+							playerCharacter.kick(GreyBot.get(i));
+							if(!GreyBot.get(i).isAlive()) GreyBot.remove(i);
+						}
+					}
+					for(int i = RedBot.size() - 1; i >= 0 ; i--) {
+						if(RedBot.get(i).getY() != playerCharacter.getY()) continue;
+						double diff = RedBot.get(i).getX() - playerCharacter.getX();
+						if(diff > 0.0 && diff < Character.ATTACK_RANGE) {
+							playerCharacter.kick(RedBot.get(i));
+							if(!RedBot.get(i).isAlive()) RedBot.remove(i);
+						}
+					}
+					for(int i = BlueBot.size() - 1; i >= 0 ; i--) {
+						if(BlueBot.get(i).getY() != playerCharacter.getY()) continue;
+						double diff = BlueBot.get(i).getX() - playerCharacter.getX();
+						if(diff > 0.0 && diff < Character.ATTACK_RANGE) {
+							playerCharacter.kick(BlueBot.get(i));
+							if(!BlueBot.get(i).isAlive()) BlueBot.remove(i);
+						}
+					}
 				}else if(input.contains("RIGHT") && !input.contains("A")) {
 					playerCharacter.walkRight();
 					playerCharacter.setWalking(true);
 				}else if(input.contains("LEFT") && !input.contains("A")) {
 					playerCharacter.walkLeft();
 					playerCharacter.setWalking(true);
+				}else if(input.contains("UP") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
+					playerCharacter.jump();
+				}else if(input.contains("DOWN")  && !playerCharacter.isJumping() && !playerCharacter.isDowning()){
+					playerCharacter.crouch();
+				}else if(input.contains("X") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
+					playerCharacter.down();
+				}else if(input.contains("D") && !playerCharacter.isJumping() && !playerCharacter.isDowning() && !playerCharacter.isWalking()) {
+					playerCharacter.block();
 				}
 			}
 		});
@@ -253,6 +301,10 @@ public class GameViewManager extends ViewManager{
 					input.remove("S");
 					playerCharacter.setAttacking(false);
 					attacked = false;
+				}
+				if(event.getCode() == KeyCode.D) {
+					input.remove("D");
+					playerCharacter.setIdle();
 				}
 			}
 		});

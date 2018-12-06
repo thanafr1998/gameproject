@@ -8,6 +8,10 @@ public class EnemyBlue {
 	
 	public static final Image[] toRight = {Character.BLUE_walkR1,Character.BLUE_walkR2,Character.BLUE_walkR3};
 	public static final Image[] toLeft = {Character.BLUE_walkL1,Character.BLUE_walkL2,Character.BLUE_walkL3};
+	private static final Image[] punchLeft = {Character.BLUE_punchL1,Character.BLUE_punchL2};
+	private static final Image[] punchRight = {Character.BLUE_punchR1,Character.BLUE_punchR2};
+	private static final Image[] kickLeft = {Character.BLUE_kickL1,Character.BLUE_kickL2};
+	private static final Image[] kickRight = {Character.BLUE_kickR1,Character.BLUE_kickR2};
 	public static final int PUNCH_DAMAGE = 30;
 	public static final int KICK_DAMAGE = 15;
 	public static final int MAX_HP = 1500;
@@ -171,21 +175,27 @@ public class EnemyBlue {
 	
 	public void randomAction(double startTime) {
 		double temp = (Math.random()*100.0) + 1.0;
-		if(temp > 0 && temp <= 60) {
+		if(temp > 0 && temp <= 30) {
 			action = "idle";
-			actionDuration = Math.random()+ 5.0;
+			actionDuration = Math.random()*3.0 + 2.0;
+			actionEnd = startTime + actionDuration;
+			return;
+		}
+		else if(temp > 30 && temp <= 60) {
+			action = "block";
+			actionDuration = Math.random()*3.0 + 2.0;
 			actionEnd = startTime + actionDuration;
 			return;
 		}
 		else if(temp > 60 && temp <= 80) {
 			action = "walkLeft";
-			actionDuration = Math.random() + 5.0;
+			actionDuration = Math.random()*3.0 + 2.0;
 			actionEnd = startTime + actionDuration;
 			return;
 		}
 		else if(temp > 80 && temp <= 100) {
 			action = "walkRight";
-			actionDuration = Math.random() + 5.0;
+			actionDuration = Math.random()*3.0 + 2.0;
 			actionEnd = startTime + actionDuration;
 			return;
 		}
@@ -196,6 +206,11 @@ public class EnemyBlue {
 
 		if(action.equals("idle")) {
 			state = Character.BLUE_IDLE;
+			walkCounter = 0;
+		}
+		else if(action.equals("block")){
+			blocking = true;
+			state = Character.BLUE_BLOCK;
 			walkCounter = 0;
 		}
 		else if(action.equals("walkLeft")) {
