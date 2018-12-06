@@ -206,18 +206,18 @@ public class GameViewManager extends ViewManager{
 						}
 					});
 					t.start();
-				}else if(input.contains("RIGHT") && !input.contains("A")) {
-					playerCharacter.walkRight();
-					playerCharacter.setWalking(true);
-				}else if(input.contains("LEFT") && !input.contains("A")) {
-					playerCharacter.walkLeft();
-					playerCharacter.setWalking(true);
 				}else if(input.contains("UP") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
 					playerCharacter.jump();
 				}else if(input.contains("DOWN")  && !playerCharacter.isJumping() && !playerCharacter.isDowning()){
 					playerCharacter.crouch();
 				}else if(input.contains("X") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
 					playerCharacter.down();
+				}else if(input.contains("RIGHT") && !input.contains("A")) {
+					playerCharacter.walkRight();
+					playerCharacter.setWalking(true);
+				}else if(input.contains("LEFT") && !input.contains("A")) {
+					playerCharacter.walkLeft();
+					playerCharacter.setWalking(true);
 				}
 			}
 		});
