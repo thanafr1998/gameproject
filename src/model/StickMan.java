@@ -106,6 +106,24 @@ public class StickMan{
 		actionCounter++;
 	}
 	
+	public void kickRight() {
+		walking = false; idle = false; jumping = false; attacking = true; blocking = false;
+		if(actionCounter == 2) {
+			this.setIdle(); return;
+		}
+		else state = kickRight[actionCounter];
+		actionCounter++;
+	}
+	
+	public void kickLeft() {
+		walking = false; idle = false; jumping = false; attacking = true; blocking = false;
+		if(actionCounter == 2) {
+			this.setIdle(); return;
+		}
+		else state = kickLeft[actionCounter];
+		actionCounter++;
+	}
+	
 	public void jump() {
 		if(down) return;
 		n = 450;

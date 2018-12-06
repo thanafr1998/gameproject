@@ -128,6 +128,36 @@ public class GameViewManager extends ViewManager{
 						}
 					});
 					t.start();
+				}if(input.contains("LEFT") && input.contains("S") && !playerCharacter.isAttacking() && !attacked) {
+					playerCharacter.setAttacking(true);
+					attacked = true;
+					t = new Thread(() -> {
+						try {
+							playerCharacter.kickLeft();
+							Thread.sleep(50);
+							playerCharacter.kickLeft();
+							Thread.sleep(50);
+							playerCharacter.setIdle();
+						}catch(Exception e) {
+							playerCharacter.setIdle();
+						}
+					});
+					t.start();
+				}else if(input.contains("RIGHT") && input.contains("S") && !playerCharacter.isAttacking() && !attacked) {
+					attacked = true;
+					playerCharacter.setAttacking(true);
+					t = new Thread(() -> {
+						try {
+							playerCharacter.kickRight();
+							Thread.sleep(50);
+							playerCharacter.kickRight();
+							Thread.sleep(50);
+							playerCharacter.setIdle();
+						}catch(Exception e) {
+							playerCharacter.setIdle();
+						}
+					});
+					t.start();
 				}else if(input.contains("RIGHT") && !input.contains("A")) {
 					playerCharacter.walkRight();
 					playerCharacter.setWalking(true);
@@ -174,6 +204,11 @@ public class GameViewManager extends ViewManager{
 				}
 				if(event.getCode() == KeyCode.X) {
 					input.remove("X");
+				}
+				if(event.getCode() == KeyCode.S) {
+					input.remove("S");
+					playerCharacter.setAttacking(false);
+					attacked = false;
 				}
 			}
 		});
