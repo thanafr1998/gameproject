@@ -46,9 +46,10 @@ public class GameViewManager extends ViewManager{
 	boolean redWasFilled, blueWasFilled, greyWasFilled;
 	private Thread t;
 	private ArrayList<String> input;
+	private boolean attacked;
 
-	
 	private GameButton button;
+	
 	
 	public GameViewManager(String name) {
 			
@@ -97,8 +98,9 @@ public class GameViewManager extends ViewManager{
 					input.add(k);
 				}
 				
-				if(input.contains("LEFT") && input.contains("A") && !playerCharacter.isAttacking()) {
+				if(input.contains("LEFT") && input.contains("A") && !playerCharacter.isAttacking() && !attacked) {
 					playerCharacter.setAttacking(true);
+					attacked = true;
 					t = new Thread(() -> {
 						try {
 							playerCharacter.punchLeft();
@@ -111,7 +113,8 @@ public class GameViewManager extends ViewManager{
 						}
 					});
 					t.start();
-				}else if(input.contains("RIGHT") && input.contains("A") && !playerCharacter.isAttacking()) {
+				}else if(input.contains("RIGHT") && input.contains("A") && !playerCharacter.isAttacking() && !attacked) {
+					attacked = true;
 					playerCharacter.setAttacking(true);
 					t = new Thread(() -> {
 						try {
@@ -167,6 +170,7 @@ public class GameViewManager extends ViewManager{
 				if(event.getCode() == KeyCode.A) {
 					input.remove("A");
 					playerCharacter.setAttacking(false);
+					attacked = false;
 				}
 				if(event.getCode() == KeyCode.X) {
 					input.remove("X");
