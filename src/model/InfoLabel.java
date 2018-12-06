@@ -9,7 +9,7 @@ import javafx.scene.text.Font;
 
 public class InfoLabel extends Label{
 	
-	private final String FONT_PATH = "src/model/resources/kenvector_future.ttf";
+	private final String FONT_PATH = "res/font/kenvector_future.ttf";
 	
 	public InfoLabel(String text) {
 		

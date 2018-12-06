@@ -64,6 +64,7 @@ public class GameButton extends Button{
 		setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
+				Sound.pressSound.play();
 				if(event.getButton().equals(MouseButton.PRIMARY)) {
 					setButtonPressed();
 					setEffect(new DropShadow());
