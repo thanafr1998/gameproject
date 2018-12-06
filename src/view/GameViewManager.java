@@ -135,7 +135,11 @@ public class GameViewManager extends ViewManager{
 					playerCharacter.jump();
 				}else if(input.contains("DOWN") && !playerCharacter.isJumping() ) {
 					playerCharacter.crouch();
+				}else if(input.contains("X") && !playerCharacter.isJumping()) {
+					System.out.println("i'm trying");
+					playerCharacter.down();
 				}
+				
 				
 
 			}
@@ -163,6 +167,9 @@ public class GameViewManager extends ViewManager{
 				if(event.getCode() == KeyCode.A) {
 					input.remove("A");
 					playerCharacter.setAttacking(false);
+				}
+				if(event.getCode() == KeyCode.X) {
+					input.remove("X");
 				}
 			}
 		});
