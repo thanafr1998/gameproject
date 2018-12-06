@@ -24,6 +24,7 @@ import model.GameButton;
 import model.StickMan;
 import model.Character;
 import model.subScene;
+import obstacle.Missile;
 import exception.*;
 
 public class GameViewManager extends ViewManager{
@@ -41,7 +42,8 @@ public class GameViewManager extends ViewManager{
 	private ArrayList<EnemyRed> RedBot;
 	private ArrayList<EnemyBlue> BlueBot;
 	private ArrayList<EnemyGrey> GreyBot;
-	int lastAddRed, lastAddBlue, lastAddGrey;
+	private ArrayList<Missile> missiles;
+	int lastAddRed, lastAddBlue, lastAddGrey, lastAddMissile;
 	boolean redWasFilled, blueWasFilled, greyWasFilled;
 	private Thread t;
 	private ArrayList<String> input;
@@ -59,7 +61,8 @@ public class GameViewManager extends ViewManager{
 		RedBot = new ArrayList<EnemyRed>();
 		BlueBot = new ArrayList<EnemyBlue>();
 		GreyBot = new ArrayList<EnemyGrey>();
-		lastAddRed = 0; lastAddBlue = 0; lastAddGrey = 0;
+		missiles = new ArrayList<Missile>();
+		lastAddRed = 0; lastAddBlue = 0; lastAddGrey = 0; lastAddMissile = 0;
 		redWasFilled = false; blueWasFilled = false; greyWasFilled = false;
 		input = new ArrayList<String>();
 	}
@@ -258,9 +261,9 @@ public class GameViewManager extends ViewManager{
 					playerCharacter.setWalking(true);
 				}else if(input.contains("I") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
 					playerCharacter.jump();
-				}else if(input.contains("K")  && !playerCharacter.isJumping() && !playerCharacter.isDowning()){
+				}else if(input.contains("C")  && !playerCharacter.isJumping() && !playerCharacter.isDowning()){
 					playerCharacter.crouch();
-				}else if(input.contains("X") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
+				}else if(input.contains("K") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
 					playerCharacter.down();
 				}else if(input.contains("D") && !playerCharacter.isJumping() && !playerCharacter.isDowning() && !playerCharacter.isWalking()) {
 					playerCharacter.block();
@@ -280,9 +283,10 @@ public class GameViewManager extends ViewManager{
 					input.remove("L");
 					playerCharacter.setIdle();
 				}
-				if(event.getCode() == KeyCode.K) {
-					input.remove("K");
+				if(event.getCode() == KeyCode.C) {
+					input.remove("C");
 					playerCharacter.setIdle();
+					playerCharacter.setCrouching(false);
 				}
 				if(event.getCode() == KeyCode.I) {
 					input.remove("I");
@@ -292,8 +296,8 @@ public class GameViewManager extends ViewManager{
 					playerCharacter.setAttacking(false);
 					attacked = false;
 				}
-				if(event.getCode() == KeyCode.X) {
-					input.remove("X");
+				if(event.getCode() == KeyCode.K) {
+					input.remove("K");
 				}
 				if(event.getCode() == KeyCode.S) {
 					input.remove("S");
@@ -345,6 +349,10 @@ public class GameViewManager extends ViewManager{
 				gc.drawImage(Character.SOLID_GREY, 0, GameViewManager.height - 400, GameViewManager.width, GameViewManager.GroundThickness);
 				double time = (currentNanoTime - startNanoTime) / 1000000000.0;
 				//Add new Red enemy
+				if(((int) time) % 3 == 0 && ((int) time) != lastAddMissile) {
+					missiles.add(new Missile());
+					lastAddMissile = (int) time;
+				}
 				if(((int) time) % 17 == 0 && (int) time != lastAddRed  && !redWasFilled) {
 					if(RedBot.size() < 5)  RedBot.add(new EnemyRed());
 					if(RedBot.size() == 5) redWasFilled = true;
@@ -433,7 +441,12 @@ public class GameViewManager extends ViewManager{
 					temp.act();
 					temp.draw(gc);
 				}
-				
+				for(int i = missiles.size() - 1; i >= 0; i--) {
+					Missile M = missiles.get(i);
+					M.draw(gc);
+					if(M.move()) missiles.remove(i);
+					if(M.checkHit(playerCharacter)) missiles.remove(i);
+				}
 				playerCharacter.draw(gc);
 				gc.strokeText(String.format("Time: %.2f", time),20,20);
 				
