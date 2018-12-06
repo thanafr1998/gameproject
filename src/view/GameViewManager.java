@@ -22,15 +22,18 @@ import model.EnemyGrey;
 import model.EnemyRed;
 import model.GameButton;
 import model.StickMan;
+import model.Character;
 
 public class GameViewManager extends ViewManager{
 
 	public static final int width = 960;
 	public static final int height = 600;
+	public static final int GroundThickness = 20;
 	private AnchorPane gamePane;
 	private Scene gameScene;
 	private Stage gameStage;
 	private Stage hideStage;
+	
 	private GraphicsContext gc;
 	private StickMan playerCharacter;
 	private ArrayList<EnemyRed> RedBot;
@@ -39,6 +42,7 @@ public class GameViewManager extends ViewManager{
 	int lastAddRed, lastAddBlue, lastAddGrey;
 	boolean redWasFilled, blueWasFilled, greyWasFilled;
 	private Thread t;
+
 	
 	private GameButton button;
 	
@@ -123,7 +127,6 @@ public class GameViewManager extends ViewManager{
 		gameScene = new Scene(gamePane,width,height);
 		gameStage = new Stage();
 		gameStage.setScene(gameScene);
-		
 	}
 	
 	public void hideMenuScene(Stage menuStage) {
@@ -144,6 +147,9 @@ public class GameViewManager extends ViewManager{
 		new AnimationTimer() {
 			public void handle(long currentNanoTime) {
 				gc.clearRect(0, 0, width, height);
+				gc.drawImage(Character.SOLID_GREY, 0, GameViewManager.height - 20 , GameViewManager.width, GameViewManager.GroundThickness);
+				gc.drawImage(Character.SOLID_GREY, 0, GameViewManager.height - 200, GameViewManager.width, GameViewManager.GroundThickness);
+				gc.drawImage(Character.SOLID_GREY, 0, GameViewManager.height - 400, GameViewManager.width, GameViewManager.GroundThickness);
 				double time = (currentNanoTime - startNanoTime) / 1000000000.0;
 				//Add new Red enemy
 				if(((int) time) % 17 == 0 && (int) time != lastAddRed  && !redWasFilled) {

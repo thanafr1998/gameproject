@@ -31,7 +31,7 @@ public class StickMan{
 	
 	public StickMan(String name) {
 		this.name = name;
-		Y = GameViewManager.height - Character.HEIGHT;
+		Y = GameViewManager.height - Character.HEIGHT - GameViewManager.GroundThickness;
 		X = 50;
 		hp = StickMan.MAX_HP;
 		hpBar =  ((double) (hp * Character.WIDTH) / (double) StickMan.MAX_HP);
@@ -175,7 +175,7 @@ public class StickMan{
 	
 	public void draw(GraphicsContext gc) {
 		gc.drawImage(state,X,Y,Character.WIDTH,Character.HEIGHT);
-		gc.fillRect(X, Y - 10, hpBar, 5);
+		gc.fillRoundRect(X, Y - 10, hpBar, 5, 5, 5);
 		gc.strokeText(name, X + 4.2*(7-name.length()), Y - 20);
 	}
 

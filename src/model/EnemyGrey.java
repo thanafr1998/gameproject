@@ -28,7 +28,7 @@ public class EnemyGrey {
 		hp = EnemyGrey.MAX_HP;
 		hpBar = ((double) (hp * Character.WIDTH) / (double) EnemyGrey.MAX_HP);
 		X = Math.random()*(GameViewManager.width - Character.WIDTH);
-		Y = GameViewManager.height - Character.HEIGHT;
+		Y = Character.FLOOR_LEVEL[(int) (Math.random()*3.0)];
 		alive = true; idle = true;
 		walking = false; jumping = false; attacking = false; blocking = false;
 		walkCounter = 0;
@@ -164,7 +164,7 @@ public class EnemyGrey {
 	
 	public void draw(GraphicsContext gc) {
 		gc.drawImage(this.state, X, Y, Character.WIDTH, Character.HEIGHT);
-		gc.fillRect(X, Y - 10, hpBar, 5);
+		gc.fillRoundRect(X, Y - 10, hpBar, 5, 5, 5);
 	}
 	
 	public void randomAction(double startTime) {

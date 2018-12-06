@@ -1,12 +1,16 @@
 package model;
 
 import javafx.scene.image.Image;
+import view.GameViewManager;
 
 public class Character {
 	public static final int WIDTH = 60;
 	public static final int HEIGHT = 100;
 	public static final int PUNCH_RANGE = 75;
 	public static final int KICK_RANGE = 150;
+	public static final int[] FLOOR_LEVEL = {GameViewManager.height - 120,GameViewManager.height - 300,GameViewManager.height - 500};
+	
+	public static final Image SOLID_GREY = new Image("model/resources/SOLID_GREY.png");
 	
 	public static final Image IDLE = new Image("model/resources/IDLE.png");
 	public static final Image walkR1 = new Image("model/resources/WALK_RIGHT_1.png");

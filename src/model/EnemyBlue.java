@@ -30,7 +30,7 @@ public class EnemyBlue {
 		hp = EnemyBlue.MAX_HP;
 		hpBar = ((double) (hp * Character.WIDTH) / (double) EnemyBlue.MAX_HP);
 		X = Math.random()*(GameViewManager.width - Character.WIDTH);
-		Y = GameViewManager.height - Character.HEIGHT;
+		Y = Character.FLOOR_LEVEL[(int) (Math.random()*3.0)];
 		alive = true; idle = true;
 		walking = false; jumping = false; attacking = false; blocking = false;
 		walkCounter = 0;
@@ -166,7 +166,7 @@ public class EnemyBlue {
 	
 	public void draw(GraphicsContext gc) {
 		gc.drawImage(this.state, X, Y, Character.WIDTH, Character.HEIGHT);
-		gc.fillRect(X, Y - 10, hpBar, 5);
+		gc.fillRoundRect(X, Y - 10, hpBar, 5, 5, 5);
 	}
 	
 	public void randomAction(double startTime) {
@@ -179,13 +179,13 @@ public class EnemyBlue {
 		}
 		else if(temp > 60 && temp <= 80) {
 			action = "walkLeft";
-			actionDuration = Math.random() + 3.0;
+			actionDuration = Math.random() + 5.0;
 			actionEnd = startTime + actionDuration;
 			return;
 		}
 		else if(temp > 80 && temp <= 100) {
 			action = "walkRight";
-			actionDuration = Math.random() + 3.0;
+			actionDuration = Math.random() + 5.0;
 			actionEnd = startTime + actionDuration;
 			return;
 		}
