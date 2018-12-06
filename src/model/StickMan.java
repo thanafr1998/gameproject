@@ -19,12 +19,12 @@ public class StickMan{
 	private static final Image[] kickRight = {Character.kickR1,Character.kickR2};
 	public static final int PUNCH_DAMAGE = 75;
 	public static final int KICK_DAMAGE = 40;
-	public static final int MAX_HP = 1000;
+	public static final int MAX_HP = 2000;
 	public static final double WALK_SPEED = 3.5;
 
 	private String name; 
 	private Image state;
-	private boolean alive, idle, walking, jumping, attacking, blocking;
+	private boolean alive, idle, walking, jumping, attacking, blocking, crouching;
 	private int hp;
 	private double hpBar;
 	private int actionCounter;
@@ -192,6 +192,7 @@ public class StickMan{
 	
 	public void crouch() {
 		state = Character.CROUCH;
+		crouching = true;
 	}
 	
 	public void down() {
@@ -303,6 +304,12 @@ public class StickMan{
 	public void setBlocking(boolean blocking) {
 		this.blocking = blocking;
 		walking = false; idle = false; jumping = false; attacking = false; down = false; jump = false;
+	}
+	public boolean isCrouching() {
+		return crouching;
+	}
+	public void setCrouching(boolean crouching) {
+		this.crouching = crouching;
 	}
 
 }
