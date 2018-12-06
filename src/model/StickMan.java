@@ -227,7 +227,7 @@ public class StickMan{
 		return idle;
 	}
 	public void setIdle() {
-		idle = true; walking = false; attacking = false; blocking = false; jump = false; jumping = false; down = false;
+		idle = true; walking = false; attacking = false; blocking = false;
 		state = Character.IDLE;
 		actionCounter = 0;
 	}
