@@ -34,7 +34,7 @@ public class GameButton extends Button{
 		try {
 			setFont(Font.loadFont(new FileInputStream(FONT_PATH),fontSize));
 		} catch (FileNotFoundException e) {
-			setFont(Font.font("Arial", fontSize));
+			setFont(Font.font("Century", fontSize));
 		}
 	}
 	

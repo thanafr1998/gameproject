@@ -189,6 +189,7 @@ public class StickMan{
 	}
 	
 	public void down() {
+		state = Character.JUMP;
 		down = true;
 		n = 200;
 		t = new Thread(() -> {
@@ -203,12 +204,15 @@ public class StickMan{
 							n--;
 							down = true;
 						}else {
+							state = Character.IDLE;
 							t.interrupt();
 						}
 					}else if(Y >= 480) {
+						state = Character.IDLE;
 						t.interrupt();
 					}
 				}catch(InterruptedException e){
+					state = Character.IDLE;
 					down = false;
 					break;
 				}

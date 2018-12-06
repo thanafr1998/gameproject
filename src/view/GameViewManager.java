@@ -90,13 +90,10 @@ public class GameViewManager extends ViewManager{
 			@Override
 			public void handle(KeyEvent event) {
 				String k = event.getCode().toString();
-				if(input.isEmpty()) playerCharacter.setIdle();
-				//System.out.println(k);
 				if(!input.contains(k)) {
 					input.add(k);
 				}
-				
-				if(input.contains("LEFT") && input.contains("A") && !playerCharacter.isAttacking() && !attacked) {
+				if(input.contains("J") && input.contains("A") && !playerCharacter.isAttacking() && !attacked) {
 					playerCharacter.setAttacking(true);
 					attacked = true;
 					t = new Thread(() -> {
@@ -135,7 +132,7 @@ public class GameViewManager extends ViewManager{
 							if(!BlueBot.get(i).isAlive()) BlueBot.remove(i);
 						}
 					}
-				}else if(input.contains("RIGHT") && input.contains("A") && !playerCharacter.isAttacking() && !attacked) {
+				}else if(input.contains("L") && input.contains("A") && !playerCharacter.isAttacking() && !attacked) {
 					attacked = true;
 					playerCharacter.setAttacking(true);
 					t = new Thread(() -> {
@@ -174,7 +171,7 @@ public class GameViewManager extends ViewManager{
 							if(!BlueBot.get(i).isAlive()) BlueBot.remove(i);
 						}
 					}
-				}if(input.contains("LEFT") && input.contains("S") && !playerCharacter.isAttacking() && !attacked) {
+				}if(input.contains("J") && input.contains("S") && !playerCharacter.isAttacking() && !attacked) {
 					playerCharacter.setAttacking(true);
 					attacked = true;
 					t = new Thread(() -> {
@@ -213,7 +210,7 @@ public class GameViewManager extends ViewManager{
 							if(!BlueBot.get(i).isAlive()) BlueBot.remove(i);
 						}
 					}
-				}else if(input.contains("RIGHT") && input.contains("S") && !playerCharacter.isAttacking() && !attacked) {
+				}else if(input.contains("L") && input.contains("S") && !playerCharacter.isAttacking() && !attacked) {
 					attacked = true;
 					playerCharacter.setAttacking(true);
 					t = new Thread(() -> {
@@ -252,15 +249,15 @@ public class GameViewManager extends ViewManager{
 							if(!BlueBot.get(i).isAlive()) BlueBot.remove(i);
 						}
 					}
-				}else if(input.contains("RIGHT") && !input.contains("A")) {
+				}else if(input.contains("L") && !input.contains("A")) {
 					playerCharacter.walkRight();
 					playerCharacter.setWalking(true);
-				}else if(input.contains("LEFT") && !input.contains("A")) {
+				}else if(input.contains("J") && !input.contains("A")) {
 					playerCharacter.walkLeft();
 					playerCharacter.setWalking(true);
-				}else if(input.contains("UP") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
+				}else if(input.contains("I") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
 					playerCharacter.jump();
-				}else if(input.contains("DOWN")  && !playerCharacter.isJumping() && !playerCharacter.isDowning()){
+				}else if(input.contains("K")  && !playerCharacter.isJumping() && !playerCharacter.isDowning()){
 					playerCharacter.crouch();
 				}else if(input.contains("X") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
 					playerCharacter.down();
@@ -274,20 +271,20 @@ public class GameViewManager extends ViewManager{
 
 			@Override
 			public void handle(KeyEvent event) {
-				if(event.getCode() == KeyCode.LEFT) {
-					input.remove("LEFT");
+				if(event.getCode() == KeyCode.J) {
+					input.remove("J");
 					playerCharacter.setIdle();
 				}
-				if(event.getCode() == KeyCode.RIGHT) {
-					input.remove("RIGHT");
+				if(event.getCode() == KeyCode.L) {
+					input.remove("L");
 					playerCharacter.setIdle();
 				}
-				if(event.getCode() == KeyCode.DOWN) {
-					input.remove("DOWN");
+				if(event.getCode() == KeyCode.K) {
+					input.remove("K");
 					playerCharacter.setIdle();
 				}
-				if(event.getCode() == KeyCode.UP) {
-					input.remove("UP");
+				if(event.getCode() == KeyCode.I) {
+					input.remove("I");
 				}
 				if(event.getCode() == KeyCode.A) {
 					input.remove("A");

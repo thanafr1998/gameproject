@@ -87,8 +87,8 @@ public class EnemyGrey {
 		return idle;
 	}
 
-	public void setIdle(boolean idle) {
-		this.idle = idle;
+	public void setIdle() {
+		idle = true; walking = false; jumping = false; attacking = false; blocking = false;
 		state = Character.GREY_IDLE;
 		walkCounter = 0;
 		action = "";
@@ -116,6 +116,7 @@ public class EnemyGrey {
 
 	public void setAttacking(boolean attacking) {
 		this.attacking = attacking;
+		idle = false; walking = false; jumping = false; blocking = false;
 	}
 
 	public boolean isBlocking() {
@@ -124,6 +125,7 @@ public class EnemyGrey {
 
 	public void setBlocking(boolean blocking) {
 		this.blocking = blocking;
+		idle = false; walking = false; jumping = false; attacking = false;
 	}
 
 	public int getHp() {
@@ -172,6 +174,7 @@ public class EnemyGrey {
 	}
 	
 	public void randomAction(double startTime) {
+		this.setIdle();
 		double temp = (Math.random()*100.0) + 1.0;
 		if(temp > 0 && temp <= 30) {
 			action = "idle";
