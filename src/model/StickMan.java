@@ -19,7 +19,7 @@ public class StickMan{
 	private static final Image[] kickRight = {Character.kickR1,Character.kickR2};
 	public static final int PUNCH_DAMAGE = 75;
 	public static final int KICK_DAMAGE = 40;
-	public static final int MAX_HP = 1000;
+	public static final int MAX_HP = 2000;
 	public static final double WALK_SPEED = 3.5;
 
 	private String name; 
