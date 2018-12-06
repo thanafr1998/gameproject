@@ -7,6 +7,10 @@ import view.GameViewManager;
 public class EnemyGrey {
 	public static final Image[] toRight = {Character.GREY_walkR1,Character.GREY_walkR2,Character.GREY_walkR3};
 	public static final Image[] toLeft = {Character.GREY_walkL1,Character.GREY_walkL2,Character.GREY_walkL3};
+	private static final Image[] punchLeft = {Character.GREY_punchL1,Character.GREY_punchL2};
+	private static final Image[] punchRight = {Character.GREY_punchR1,Character.GREY_punchR2};
+	private static final Image[] kickLeft = {Character.GREY_kickL1,Character.GREY_kickL2};
+	private static final Image[] kickRight = {Character.GREY_kickR1,Character.GREY_kickR2};
 	public static final int PUNCH_DAMAGE = 60;
 	public static final int KICK_DAMAGE = 30;
 	public static final int MAX_HP = 750;
@@ -169,9 +173,15 @@ public class EnemyGrey {
 	
 	public void randomAction(double startTime) {
 		double temp = (Math.random()*100.0) + 1.0;
-		if(temp > 0 && temp <= 60) {
+		if(temp > 0 && temp <= 30) {
 			action = "idle";
-			actionDuration = Math.random() + 5.0;
+			actionDuration = Math.random()*3.0 + 2.0;
+			actionEnd = startTime + actionDuration;
+			return;
+		}
+		else if(temp > 30 && temp <= 60) {
+			action = "block";
+			actionDuration = Math.random()*3.0 + 2.0;
 			actionEnd = startTime + actionDuration;
 			return;
 		}
@@ -201,6 +211,11 @@ public class EnemyGrey {
 		}
 		else if(action.equals("walkRight")) {
 			walkRight();
+		}
+		else if(action.equals("block")){
+			blocking = true;
+			state = Character.GREY_BLOCK;
+			walkCounter = 0;
 		}
 	}
 	
