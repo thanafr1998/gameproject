@@ -93,7 +93,7 @@ public class GameViewManager extends ViewManager{
 			public void handle(KeyEvent event) {
 				String k = event.getCode().toString();
 				if(input.isEmpty()) playerCharacter.setIdle();
-				System.out.println(k);
+				//System.out.println(k);
 				if(!input.contains(k)) {
 					input.add(k);
 				}
@@ -164,17 +164,13 @@ public class GameViewManager extends ViewManager{
 				}else if(input.contains("LEFT") && !input.contains("A")) {
 					playerCharacter.walkLeft();
 					playerCharacter.setWalking(true);
-				}else if(input.contains("UP") && !playerCharacter.isJumping()) {
+				}else if(input.contains("UP") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
 					playerCharacter.jump();
-				}else if(input.contains("DOWN") && !playerCharacter.isJumping() ) {
+				}else if(input.contains("DOWN")  && !playerCharacter.isJumping() && !playerCharacter.isDowning()){
 					playerCharacter.crouch();
-				}else if(input.contains("X") && !playerCharacter.isJumping()) {
-					System.out.println("i'm trying");
+				}else if(input.contains("X") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
 					playerCharacter.down();
 				}
-				
-				
-
 			}
 		});
 		
