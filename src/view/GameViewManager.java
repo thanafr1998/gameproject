@@ -23,6 +23,7 @@ import model.EnemyRed;
 import model.GameButton;
 import model.StickMan;
 import model.Character;
+import model.subScene;
 import exception.*;
 
 public class GameViewManager extends ViewManager{
