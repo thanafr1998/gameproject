@@ -147,12 +147,15 @@ public class GameViewManager extends ViewManager{
 			public void handle(KeyEvent event) {
 				if(event.getCode() == KeyCode.LEFT) {
 					input.remove("LEFT");
+					playerCharacter.setIdle();
 				}
 				if(event.getCode() == KeyCode.RIGHT) {
 					input.remove("RIGHT");
+					playerCharacter.setIdle();
 				}
 				if(event.getCode() == KeyCode.DOWN) {
 					input.remove("DOWN");
+					playerCharacter.setIdle();
 				}
 				if(event.getCode() == KeyCode.UP) {
 					input.remove("UP");
