@@ -29,7 +29,8 @@ public class StickMan{
 	private double hpBar;
 	private int actionCounter;
 	private double X,Y;
-
+	
+	private boolean atFloor,down;
 	private int n;
 	private Thread t;
 	
@@ -106,26 +107,43 @@ public class StickMan{
 	}
 	
 	public void jump() {
-		n = 30;
+		if(down) return;
+		n = 450;
+		atFloor = false;
+		jumping = true;
 		t = new Thread(() -> {
 			while(true) {
 				try {
-					Thread.sleep(15);
-					Platform.runLater(() -> {
-						if(n > 15) {
+					Thread.sleep(1);
+					if(atFloor == false){
+						if(n > 225) {
 							Y -= 1;
 							walking = false; idle = false; jumping = true; attacking = false; blocking = false;
 							actionCounter = (actionCounter + 1) % 9;
 							n--;
-						}else if(n == 0){
-							t.interrupt();	
-						}else if(n <= 15) {
+							atFloor = false;
+						}else if(n == 225) {
 							Y += 1;
 							walking = false; idle = false; jumping = true; attacking = false; blocking = false;
 							actionCounter = (actionCounter + 1) % 9;
 							n--;
+							atFloor = true;
 						}
-					});
+					}else {
+						if(Y == 300 || Y == 100) {
+							jumping = false;
+							t.interrupt();;
+						}else if(n < 225) {
+							Y += 1;
+							walking = false; idle = false; jumping = true; attacking = false; blocking = false;
+							walkCounter = (walkCounter + 1) % 9;								n--;
+							atFloor = true;
+						}else if(n == 0){
+							jumping = false;
+							atFloor = true;
+							t.interrupt();	
+						}
+					}
 				}catch(InterruptedException e){
 					break;
 				}
@@ -137,6 +155,48 @@ public class StickMan{
 	
 	public void crouch() {
 		state = Character.CROUCH;
+	}
+	
+	public void down() {
+		if(jumping) return;
+		if(down) return;
+		n = 200;
+		down = true;
+		t = new Thread(() -> {
+			while(true) {
+				try {
+					Thread.sleep(1);
+					if(Y < 480) {
+						if(!down) {
+							Y += 1;
+							walking = false; idle = false; jumping = false; attacking = false; blocking = false;
+							walkCounter = (walkCounter + 1) % 9;
+							n--;
+							atFloor = false;
+							down = true;
+						}else if(n > 0) {
+							Y += 1;
+							walking = false; idle = false; jumping = false; attacking = false; blocking = false;
+							walkCounter = (walkCounter + 1) % 9;
+							n--;
+							atFloor = false;
+							down = true;
+						}else {
+							atFloor = true;
+							down = false;
+							t.interrupt();
+						}
+					}else if(Y >= 480) {
+						down = false;
+						atFloor = true;
+						t.interrupt();
+					}
+				}catch(InterruptedException e){
+					break;
+				}
+			}
+		});
+		t.start();
 	}
 	
 	public boolean isAlive() {
