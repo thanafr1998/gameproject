@@ -94,6 +94,7 @@ public class GameViewManager extends ViewManager{
 					if(!playerCharacter.isJumping()) playerCharacter.jump();
 					//jump (if character is idle, this mode is able to kick only) HARD !! do later
 				}else if(event.getCode() == KeyCode.DOWN) {
+					playerCharacter.down();
 					//crouch (if character is idle, this mode is able to punch only)
 				}else if(event.getCode() == KeyCode.A) {
 					//try to punch all nearby enemy
