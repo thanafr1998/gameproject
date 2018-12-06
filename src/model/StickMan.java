@@ -111,6 +111,7 @@ public class StickMan{
 		n = 450;
 		atFloor = false;
 		jumping = true;
+		state = Character.JUMP;
 		t = new Thread(() -> {
 			while(true) {
 				try {
@@ -128,6 +129,7 @@ public class StickMan{
 							actionCounter = (actionCounter + 1) % 9;
 							n--;
 							atFloor = true;
+							state = Character.IDLE;
 						}
 					}else {
 						if(Y == 300 || Y == 100) {
@@ -138,9 +140,11 @@ public class StickMan{
 							walking = false; idle = false; jumping = true; attacking = false; blocking = false;
 							actionCounter = (actionCounter + 1) % 9;								n--;
 							atFloor = true;
+							state = Character.IDLE;
 						}else if(n == 0){
 							jumping = false;
 							atFloor = true;
+							state = Character.IDLE;
 							t.interrupt();	
 						}
 					}
