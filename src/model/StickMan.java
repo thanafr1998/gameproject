@@ -136,7 +136,7 @@ public class StickMan{
 						}else if(n < 225) {
 							Y += 1;
 							walking = false; idle = false; jumping = true; attacking = false; blocking = false;
-							walkCounter = (walkCounter + 1) % 9;								n--;
+							actionCounter = (actionCounter + 1) % 9;								n--;
 							atFloor = true;
 						}else if(n == 0){
 							jumping = false;
@@ -170,14 +170,14 @@ public class StickMan{
 						if(!down) {
 							Y += 1;
 							walking = false; idle = false; jumping = false; attacking = false; blocking = false;
-							walkCounter = (walkCounter + 1) % 9;
+							actionCounter = (actionCounter + 1) % 9;
 							n--;
 							atFloor = false;
 							down = true;
 						}else if(n > 0) {
 							Y += 1;
 							walking = false; idle = false; jumping = false; attacking = false; blocking = false;
-							walkCounter = (walkCounter + 1) % 9;
+							actionCounter = (actionCounter + 1) % 9;
 							n--;
 							atFloor = false;
 							down = true;
