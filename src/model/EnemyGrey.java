@@ -22,7 +22,7 @@ public class EnemyGrey {
 	private boolean alive, idle, walking, jumping, attacking, blocking;
 	private int hp, nextAttackTime;
 	private double hpBar;
-	private int actionCounter, attackCounter;
+	private int actionCounter;
 	private double X,Y;
 	private String action;
 	private double actionDuration;
@@ -36,7 +36,7 @@ public class EnemyGrey {
 		Y = Character.FLOOR_LEVEL[(int) (Math.random()*3.0)];
 		alive = true; idle = true;
 		walking = false; jumping = false; attacking = false; blocking = false;
-		actionCounter = 0; attackCounter = 0;
+		actionCounter = 0;
 		action = "";
 		actionDuration = 0;
 		actionEnd = 0;
