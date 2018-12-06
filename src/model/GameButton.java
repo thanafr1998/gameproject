@@ -13,10 +13,10 @@ import model.Sound;
 
 public class GameButton extends Button{
 	
-	private final String FONT_PATH = "src/model/resources/kenvector_future.ttf";
-	private final String BUTTON_PRESSED = "-fx-background-color: transparent; -fx-background-image: url('/model/resources/blue_button03.png')";
-	private final String BUTTON_FREE = "-fx-background-color: transparent; -fx-background-image: url('/model/resources/blue_button04.png')";
-	private final String BUTTON_ENTER = "-fx-background-color: transparent; -fx-background-image: url('/model/resources/blue_button02.png')";
+	private final String FONT_PATH = "res/font/kenvector_future.ttf";
+	private final String BUTTON_PRESSED = "-fx-background-color: transparent; -fx-background-image: url('/image/blue_button03.png')";
+	private final String BUTTON_FREE = "-fx-background-color: transparent; -fx-background-image: url('/image/blue_button04.png')";
+	private final String BUTTON_ENTER = "-fx-background-color: transparent; -fx-background-image: url('/image/blue_button02.png')";
 	
 	private int fontSize = 18;
 	

@@ -12,8 +12,6 @@ import javafx.util.Duration;
 
 public class subScene extends SubScene{
 
-	private final String pic = "model/resources/blue_panel.png";
-
 	private AnchorPane root2 = (AnchorPane) this.getRoot();
 	
 	private boolean isHidden;
@@ -21,7 +19,7 @@ public class subScene extends SubScene{
 	public subScene() {
 		super(new AnchorPane(), 500, 300);
 		
-		BackgroundImage backgroundImage = new BackgroundImage(new Image(pic,500,300,false,true), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
+		BackgroundImage backgroundImage = new BackgroundImage(new Image(ClassLoader.getSystemResource("image/blue_panel.png").toString(),500,300,false,true), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
 		isHidden = true;
 		
 		root2.setBackground(new Background(backgroundImage));
