@@ -83,11 +83,13 @@ public class GameButton extends Button{
 		setOnMouseEntered(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
+				Sound.enterSound.play();
 				if(event.getButton().equals(MouseButton.PRIMARY)) {
-					setButtonPressed();;
+					setButtonPressed();
 				}
 				else{
 					setButtonEnter();
+					
 				}
 			}
 		});
@@ -96,7 +98,7 @@ public class GameButton extends Button{
 			@Override
 			public void handle(MouseEvent event) {
 				if(event.getButton().equals(MouseButton.PRIMARY)) {
-					setButtonPressed();;
+					setButtonPressed();
 				}
 				else{
 					setButtonFree();
@@ -105,5 +107,4 @@ public class GameButton extends Button{
 		});
 		
 	}
-	
 }
