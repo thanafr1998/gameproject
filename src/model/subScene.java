@@ -12,17 +12,17 @@ import javafx.util.Duration;
 
 public class subScene extends SubScene{
 
-	private AnchorPane root2 = (AnchorPane) this.getRoot();
-	
-	private boolean isHidden;
+	private AnchorPane rootSubScene = (AnchorPane) this.getRoot();
+	private static boolean subSceneIsHidden;
 	
 	public subScene() {
+		
 		super(new AnchorPane(), 500, 300);
 		
 		BackgroundImage backgroundImage = new BackgroundImage(new Image(ClassLoader.getSystemResource("image/blue_panel.png").toString(),500,300,false,true), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
-		isHidden = true;
+		subSceneIsHidden = true;
 		
-		root2.setBackground(new Background(backgroundImage));
+		rootSubScene.setBackground(new Background(backgroundImage));
 		
 		setLayoutX(1000);
 		setLayoutY(100);
@@ -30,23 +30,22 @@ public class subScene extends SubScene{
 	}
 
 	public void moveSubScene() {
+		
 		TranslateTransition transition = new TranslateTransition();
 		transition.setDuration(Duration.seconds(0.3));
 		transition.setNode(this);
 		
-		if(isHidden == true) {
+		if(subSceneIsHidden == true) {
 			transition.setToX(-600);
-			isHidden = false;
+			subSceneIsHidden = false;
 		}else {
 			transition.setToX(0);
-			isHidden = true;
+			subSceneIsHidden = true;
 		}
-		
 		transition.play();
 	}
 	
-	public AnchorPane getRoot2() {
-		return root2;
+	public AnchorPane getRootSubScene() {
+		return rootSubScene;
 	}
-	
 }
