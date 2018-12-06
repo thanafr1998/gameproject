@@ -13,6 +13,10 @@ public class StickMan{
 	
 	public static final Image[] toRight = {Character.walkR1,Character.walkR2,Character.walkR3};
 	public static final Image[] toLeft = {Character.walkL1,Character.walkL2,Character.walkL3};
+	public static final Image[] punchLeft = {Character.punchL1,Character.punchL2};
+	public static final Image[] punchRight = {Character.punchR1,Character.punchR2};
+	public static final Image[] C_punchLeft = {Character.C_punchL1,Character.C_punchL2};
+	public static final Image[] C_punchRight = {Character.C_punchR1,Character.C_punchR2};
 	public static final int PUNCH_DAMAGE = 75;
 	public static final int KICK_DAMAGE = 40;
 	public static final int MAX_HP = 1000;
@@ -23,7 +27,7 @@ public class StickMan{
 	private boolean alive, idle, walking, jumping, attacking, blocking;
 	private int hp;
 	private double hpBar;
-	private int walkCounter;
+	private int actionCounter;
 	private double X,Y;
 
 	private int n;
@@ -38,7 +42,7 @@ public class StickMan{
 		state = Character.IDLE;
 		alive = true; idle = true;
 		walking = false; jumping = false; attacking = false; blocking = false;
-		walkCounter = 0;
+		actionCounter = 0;
 	}
 	public void punch(StickMan target) {
 		if(target.blocking) return;
@@ -71,16 +75,34 @@ public class StickMan{
 		X += WALK_SPEED;
 		if(X > GameViewManager.width - 60) X = GameViewManager.width - 60;
 		walking = true; idle = false; jumping = false; attacking = false; blocking = false;
-		state = toRight[walkCounter / 3];
-		walkCounter = (walkCounter + 1) % 9;
+		state = toRight[actionCounter / 3];
+		actionCounter = (actionCounter + 1) % 9;
 	}
 	
 	public void walkLeft() {
 		X -= WALK_SPEED;
 		if(X < 0) X = 0;
 		walking = true; idle = false; jumping = false; attacking = false; blocking = false;
-		state = toLeft[walkCounter / 3];
-		walkCounter = (walkCounter + 1) % 9;
+		state = toLeft[actionCounter / 3];
+		actionCounter = (actionCounter + 1) % 9;
+	}
+	
+	public void punchLeft() {
+		walking = false; idle = false; jumping = false; attacking = true; blocking = false;
+		if(actionCounter == 2) {
+			this.setIdle(); return;
+		}
+		else state = punchLeft[actionCounter];
+		actionCounter++;
+	}
+	
+	public void punchRight() {
+		walking = false; idle = false; jumping = false; attacking = true; blocking = false;
+		if(actionCounter == 2) {
+			this.setIdle(); return;
+		}
+		else state = punchRight[actionCounter];
+		actionCounter++;
 	}
 	
 	public void jump() {
@@ -93,14 +115,14 @@ public class StickMan{
 						if(n > 15) {
 							Y -= 1;
 							walking = false; idle = false; jumping = true; attacking = false; blocking = false;
-							walkCounter = (walkCounter + 1) % 9;
+							actionCounter = (actionCounter + 1) % 9;
 							n--;
 						}else if(n == 0){
 							t.interrupt();	
 						}else if(n <= 15) {
 							Y += 1;
 							walking = false; idle = false; jumping = true; attacking = false; blocking = false;
-							walkCounter = (walkCounter + 1) % 9;
+							actionCounter = (actionCounter + 1) % 9;
 							n--;
 						}
 					});
@@ -111,6 +133,10 @@ public class StickMan{
 		});
 		t.start();
 		
+	}
+	
+	public void crouch() {
+		state = Character.CROUCH;
 	}
 	
 	public boolean isAlive() {
@@ -125,13 +151,14 @@ public class StickMan{
 	public void setIdle() {
 		idle = true; walking = false; jumping = false; attacking = false; blocking = false;
 		state = Character.IDLE;
-		walkCounter = 0;
+		actionCounter = 0;
 	}
 	public boolean isWalking() {
 		return walking;
 	}
 	public void setWalking(boolean walking) {
-		this.walking = walking;
+		if(walking) { this.walking = true; idle = false; jumping = false; this.attacking = false; blocking = false;}
+		else { this.walking = false; idle = false; jumping = false; this.attacking = false; blocking = false; }
 	}
 	public boolean isJumping() {
 		return jumping;
@@ -143,7 +170,8 @@ public class StickMan{
 		return attacking;
 	}
 	public void setAttacking(boolean attacking) {
-		this.attacking = attacking;
+		if(attacking) { walking = false; idle = false; jumping = false; this.attacking = true; blocking = false;}
+		else { walking = false; idle = true; jumping = false; this.attacking = false; blocking = false; }
 	}
 	public int getHp() {
 		return hp;

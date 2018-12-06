@@ -19,6 +19,20 @@ public class Character {
 	public static final Image walkL1 = new Image("model/resources/WALK_LEFT_1.png");
 	public static final Image walkL2 = new Image("model/resources/WALK_LEFT_2.png");
 	public static final Image walkL3 = new Image("model/resources/WALK_LEFT_3.png");
+	public static final Image JUMP = new Image("model/resources/JUMP.png");
+	public static final Image CROUCH = new Image("model/resources/CROUCH.png");
+	public static final Image C_punchL1 = new Image("model/resources/CROUCH_PUNCH_LEFT_1.png");
+	public static final Image C_punchL2 = new Image("model/resources/CROUCH_PUNCH_LEFT_2.png");
+	public static final Image C_punchR1 = new Image("model/resources/CROUCH_PUNCH_RIGHT_1.png");
+	public static final Image C_punchR2 = new Image("model/resources/CROUCH_PUNCH_RIGHT_2.png");
+	public static final Image punchL1 = new Image("model/resources/PUNCH_LEFT_1.png");
+	public static final Image punchL2 = new Image("model/resources/PUNCH_LEFT_2.png");
+	public static final Image punchR1 = new Image("model/resources/PUNCH_RIGHT_1.png");
+	public static final Image punchR2 = new Image("model/resources/PUNCH_RIGHT_2.png");
+	public static final Image kickL1 = new Image("model/resources/KICK_LEFT_1.png");
+	public static final Image kickL2 = new Image("model/resources/KICK_LEFT_2.png");
+	public static final Image kickR1 = new Image("model/resources/KICK_RIGHT_1.png");
+	public static final Image kickR2 = new Image("model/resources/KICK_RIGHT_2.png");
 	
 	public static final Image RED_IDLE = new Image("model/resources/RED_IDLE.png");
 	public static final Image RED_walkR1 = new Image("model/resources/RED_WALK_RIGHT_1.png");

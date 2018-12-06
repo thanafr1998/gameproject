@@ -1,8 +1,8 @@
 package view;
 
 import java.util.ArrayList;
-
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -10,6 +10,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -23,6 +25,7 @@ import model.EnemyRed;
 import model.GameButton;
 import model.StickMan;
 import model.Character;
+import exception.*;
 
 public class GameViewManager extends ViewManager{
 
@@ -42,6 +45,7 @@ public class GameViewManager extends ViewManager{
 	int lastAddRed, lastAddBlue, lastAddGrey;
 	boolean redWasFilled, blueWasFilled, greyWasFilled;
 	private Thread t;
+	private ArrayList<String> input;
 
 	
 	private GameButton button;
@@ -57,6 +61,7 @@ public class GameViewManager extends ViewManager{
 		GreyBot = new ArrayList<EnemyGrey>();
 		lastAddRed = 0; lastAddBlue = 0; lastAddGrey = 0;
 		redWasFilled = false; blueWasFilled = false; greyWasFilled = false;
+		input = new ArrayList<String>();
 	}
 
 	private void createButton() {
@@ -85,24 +90,54 @@ public class GameViewManager extends ViewManager{
 
 			@Override
 			public void handle(KeyEvent event) {
-				
-				if(event.getCode() == KeyCode.LEFT) {
-					playerCharacter.walkLeft();
-				}else if(event.getCode() == KeyCode.RIGHT) {
-					playerCharacter.walkRight();
-				}else if(event.getCode() == KeyCode.UP) {
-					if(!playerCharacter.isJumping()) playerCharacter.jump();
-					//jump (if character is idle, this mode is able to kick only) HARD !! do later
-				}else if(event.getCode() == KeyCode.DOWN) {
-					//crouch (if character is idle, this mode is able to punch only)
-				}else if(event.getCode() == KeyCode.A) {
-					//try to punch all nearby enemy
-				}else if(event.getCode() == KeyCode.S) {
-					//try to kick all nearby enemy
-				}else if(event.getCode() == KeyCode.D) {
-					//blocking -> negate all damage
+				String k = event.getCode().toString();
+				if(input.isEmpty()) playerCharacter.setIdle();
+				System.out.println(k);
+				if(!input.contains(k)) {
+					input.add(k);
 				}
 				
+				if(input.contains("LEFT") && input.contains("A") && !playerCharacter.isAttacking()) {
+					playerCharacter.setAttacking(true);
+					t = new Thread(() -> {
+						try {
+							playerCharacter.punchLeft();
+							Thread.sleep(50);
+							playerCharacter.punchLeft();
+							Thread.sleep(50);
+							playerCharacter.setIdle();
+						}catch(Exception e) {
+							playerCharacter.setIdle();
+						}
+					});
+					t.start();
+				}else if(input.contains("RIGHT") && input.contains("A") && !playerCharacter.isAttacking()) {
+					playerCharacter.setAttacking(true);
+					t = new Thread(() -> {
+						try {
+							playerCharacter.punchRight();
+							Thread.sleep(50);
+							playerCharacter.punchRight();
+							Thread.sleep(50);
+							playerCharacter.setIdle();
+						}catch(Exception e) {
+							playerCharacter.setIdle();
+						}
+					});
+					t.start();
+				}else if(input.contains("RIGHT") && !input.contains("A")) {
+					playerCharacter.walkRight();
+					playerCharacter.setWalking(true);
+				}else if(input.contains("LEFT") && !input.contains("A")) {
+					playerCharacter.walkLeft();
+					playerCharacter.setWalking(true);
+				}else if(input.contains("UP") && !playerCharacter.isJumping()) {
+					playerCharacter.jump();
+				}else if(input.contains("DOWN") && !playerCharacter.isJumping() ) {
+					playerCharacter.crouch();
+				}
+				
+
 			}
 		});
 		
@@ -110,7 +145,22 @@ public class GameViewManager extends ViewManager{
 
 			@Override
 			public void handle(KeyEvent event) {
-				playerCharacter.setIdle();
+				if(event.getCode() == KeyCode.LEFT) {
+					input.remove("LEFT");
+				}
+				if(event.getCode() == KeyCode.RIGHT) {
+					input.remove("RIGHT");
+				}
+				if(event.getCode() == KeyCode.DOWN) {
+					input.remove("DOWN");
+				}
+				if(event.getCode() == KeyCode.UP) {
+					input.remove("UP");
+				}
+				if(event.getCode() == KeyCode.A) {
+					input.remove("A");
+					playerCharacter.setAttacking(false);
+				}
 			}
 		});
 		
