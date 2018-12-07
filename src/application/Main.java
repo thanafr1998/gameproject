@@ -12,7 +12,8 @@ public class Main extends Application {
 		try {
 			ViewManager view = new ViewManager();
 			primaryStage = view.getMainStage();
-			primaryStage.setTitle("Contra");
+			primaryStage.setTitle("Rambo Stackman");
+			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

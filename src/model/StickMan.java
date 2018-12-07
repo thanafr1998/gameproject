@@ -20,7 +20,7 @@ public class StickMan{
 	public static final int PUNCH_DAMAGE = 75;
 	public static final int KICK_DAMAGE = 40;
 	public static final int MAX_HP = 2000;
-	public static final double WALK_SPEED = 3.5;
+	public static final double WALK_SPEED = 8;
 
 	private String name; 
 	private Image state;
@@ -46,28 +46,40 @@ public class StickMan{
 		actionCounter = 0;
 	}
 	public void punch(EnemyGrey target) {
-		if(target.isBlocking()) return;
-		Sound.punchSound.play();
-		target.takeDamage(StickMan.PUNCH_DAMAGE);
+		if(target.isBlocking()) {
+			Sound.blockSound.play();
+		}else {
+			Sound.punchSound.play(0.2);
+			target.takeDamage(StickMan.PUNCH_DAMAGE);
+		}
 	}
 	public void punch(EnemyRed target) {
-		if(target.isBlocking()) return;
-		Sound.punchSound.play();
-		target.takeDamage(StickMan.PUNCH_DAMAGE);
+		if(target.isBlocking()) {
+			Sound.blockSound.play();
+		}else {
+			Sound.punchSound.play(0.2);
+			target.takeDamage(StickMan.PUNCH_DAMAGE);
+		}
 	}
 	public void punch(EnemyBlue target) {
-		if(target.isBlocking()) return;
-		Sound.punchSound.play();
-		target.takeDamage(StickMan.PUNCH_DAMAGE);
+		if(target.isBlocking()) {
+			Sound.blockSound.play();
+		}else {
+			Sound.punchSound.play(0.2);
+			target.takeDamage(StickMan.PUNCH_DAMAGE);
+		}
 	}
 	public void kick(EnemyGrey target) {
 		target.takeDamage(StickMan.KICK_DAMAGE);
+		Sound.kickSound.play();
 	}
 	public void kick(EnemyRed target) {
 		target.takeDamage(StickMan.KICK_DAMAGE);
+		Sound.kickSound.play();
 	}
 	public void kick(EnemyBlue target) {
 		target.takeDamage(StickMan.KICK_DAMAGE);
+		Sound.kickSound.play();
 	}
 	
 	public void takeDamage(int dmg) {

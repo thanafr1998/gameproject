@@ -31,7 +31,7 @@ import model.subScene;
 public class ViewManager {
 
 	private static final int width = 960;
-	private static final int height = 600;
+	private static final int height = 580;
 	private AnchorPane mainPane;
 	private Scene mainScene;
 	private Stage mainStage;
@@ -60,7 +60,6 @@ public class ViewManager {
 		mainStage.setScene(mainScene);
 		createButton();
 		createBackground();
-
 		createSubScene();
 		createLogo();
 	}
