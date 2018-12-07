@@ -63,8 +63,6 @@ public class ViewManager {
 
 		createSubScene();
 		createLogo();
-		
-		showSubScene = new subScene();
 	}
 	
 	private void createSubScene() {

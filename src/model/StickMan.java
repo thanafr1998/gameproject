@@ -47,14 +47,17 @@ public class StickMan{
 	}
 	public void punch(EnemyGrey target) {
 		if(target.isBlocking()) return;
+		Sound.punchSound.play();
 		target.takeDamage(StickMan.PUNCH_DAMAGE);
 	}
 	public void punch(EnemyRed target) {
 		if(target.isBlocking()) return;
+		Sound.punchSound.play();
 		target.takeDamage(StickMan.PUNCH_DAMAGE);
 	}
 	public void punch(EnemyBlue target) {
 		if(target.isBlocking()) return;
+		Sound.punchSound.play();
 		target.takeDamage(StickMan.PUNCH_DAMAGE);
 	}
 	public void kick(EnemyGrey target) {

@@ -1,6 +1,10 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import com.sun.scenario.DelayedRunnable;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -21,6 +25,7 @@ import model.EnemyBlue;
 import model.EnemyGrey;
 import model.EnemyRed;
 import model.GameButton;
+import model.Sound;
 import model.StickMan;
 import model.Character;
 import model.subScene;
@@ -42,7 +47,7 @@ public class GameViewManager extends ViewManager{
 	private ArrayList<EnemyRed> RedBot;
 	private ArrayList<EnemyBlue> BlueBot;
 	private ArrayList<EnemyGrey> GreyBot;
-	private ArrayList<Missile> missiles;
+	private CopyOnWriteArrayList<Missile> missiles;
 	int lastAddRed, lastAddBlue, lastAddGrey, lastAddMissile;
 	boolean redWasFilled, blueWasFilled, greyWasFilled;
 	private Thread t;
@@ -61,7 +66,7 @@ public class GameViewManager extends ViewManager{
 		RedBot = new ArrayList<EnemyRed>();
 		BlueBot = new ArrayList<EnemyBlue>();
 		GreyBot = new ArrayList<EnemyGrey>();
-		missiles = new ArrayList<Missile>();
+		missiles = new CopyOnWriteArrayList<Missile>();
 		lastAddRed = 0; lastAddBlue = 0; lastAddGrey = 0; lastAddMissile = 0;
 		redWasFilled = false; blueWasFilled = false; greyWasFilled = false;
 		input = new ArrayList<String>();
@@ -441,12 +446,34 @@ public class GameViewManager extends ViewManager{
 					temp.act();
 					temp.draw(gc);
 				}
+				
 				for(int i = missiles.size() - 1; i >= 0; i--) {
 					Missile M = missiles.get(i);
 					M.draw(gc);
 					if(M.move()) missiles.remove(i);
-					if(M.checkHit(playerCharacter)) missiles.remove(i);
+					if(M.checkHit(playerCharacter) && !(M.isExplode)) { 
+						M.isExplode = true;
+						t = new Thread(() -> {
+							try {
+								M.setImage(new Image(ClassLoader.getSystemResource("image/EXPLOSION.png").toString()));
+								Sound.explosionSound.play();
+								if(M.getVX() > 0) {
+									M.setBomb(80, 0);
+								}
+								else{
+									M.setBomb(-80, 0);
+								}
+								M.setSize(100,100);
+								Thread.sleep(2000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							missiles.remove(M);
+						});
+						t.start();
+					}
 				}
+				
 				playerCharacter.draw(gc);
 				gc.strokeText(String.format("Time: %.2f", time),20,20);
 				
