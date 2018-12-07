@@ -41,7 +41,7 @@ public class ViewManager {
 	private List<GameButton> menuButtons;
 	private GameButton resumeButton;
 	
-	private String name = "";
+	public static String playerName = "";
 	
 	private subScene playSubScene;
 	private subScene howToPlaySubScene;
@@ -96,12 +96,12 @@ public class ViewManager {
 			@Override
 			public void handle(MouseEvent event) {
 
-				name = enterName.getText();
-				if(name.equals("")) {
+				playerName = enterName.getText();
+				if(playerName.equals("")) {
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setContentText("Name cannot be blank");
 					alert.showAndWait();
-				}else if(name.length() > 7) {
+				}else if(playerName.length() > 7) {
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setContentText("Name is too long (max 7 characters)");
 					alert.showAndWait();
@@ -109,7 +109,7 @@ public class ViewManager {
 				else {
 					if(event.getButton().equals(MouseButton.PRIMARY)) {
 					resumeButton.setDisable(false);
-					gameViewManager = new GameViewManager(name);
+					gameViewManager = new GameViewManager(playerName);
 					gameViewManager.hideMenuScene(mainStage);
 
 					}
