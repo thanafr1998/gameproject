@@ -47,11 +47,13 @@ public class Missile {
 		if(vX > 0) {
 			if(Y == sm.getY() && !sm.isCrouching() && X > sm.getX() - width && X < sm.getX() + Character.WIDTH) {
 				sm.takeDamage(sm.getHp() / 2);
+				isExplode = true;
 				return true;
 			}
 		}else {
 			if(Y == sm.getY() && !sm.isCrouching() && X > sm.getX() - width && X < sm.getX() + Character.WIDTH) {
 				sm.takeDamage(sm.getHp() / 2);
+				isExplode = true;
 				return true;
 			}
 		}
@@ -76,4 +78,5 @@ public class Missile {
 		Y -= j;
 		vX = v;
 	}
+
 }
