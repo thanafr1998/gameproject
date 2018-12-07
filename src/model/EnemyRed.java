@@ -15,7 +15,7 @@ public class EnemyRed {
 	public static final int PUNCH_DAMAGE = 120;
 	public static final int KICK_DAMAGE = 70;
 	public static final int MAX_HP = 250;
-	public static final double WALK_SPEED = 6.5;
+	public static final double WALK_SPEED = 8;
 	
 	private Thread t;
 	private Image state;

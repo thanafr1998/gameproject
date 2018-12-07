@@ -11,8 +11,15 @@ public class Character {
 	public static final int[] FLOOR_LEVEL = {GameViewManager.height - 120,GameViewManager.height - 300,GameViewManager.height - 500};
 	
 	public static final Image SOLID_GREY = new Image(ClassLoader.getSystemResource("image/SOLID_GREY.png").toString());
+	public static final Image SOLID_RED = new Image(ClassLoader.getSystemResource("image/SOLID_RED.png").toString());
+	public static final Image SOLID_BLUE = new Image(ClassLoader.getSystemResource("image/SOLID_BLUE.png").toString());
+	public static final Image SOLID_YELLOW = new Image(ClassLoader.getSystemResource("image/SOLID_YELLOW.png").toString());
 	public static final Image MISSILE_R = new Image(ClassLoader.getSystemResource("image/MISSILE_R.png").toString() , 100 , 25 ,false , false);
 	public static final Image MISSILE_L = new Image(ClassLoader.getSystemResource("image/MISSILE_L.png").toString() , 100 ,25 , false , false);
+	public static final Image RedFist = new Image(ClassLoader.getSystemResource("image/DAMAGE_BUFF.png").toString(),25,25,false,false);
+	public static final Image BlueShield = new Image(ClassLoader.getSystemResource("image/DEFENCE_BUFF.png").toString(),25,25,false,false);
+	public static final Image YellowBoots = new Image(ClassLoader.getSystemResource("image/SPEED_BUFF.png").toString(),25,25,false,false);
+	public static final Image GreenCross = new Image(ClassLoader.getSystemResource("image/HEAL_BUFF.png").toString(),25,25,false,false);
 	
 	public static final Image IDLE = new Image(ClassLoader.getSystemResource("image/IDLE.png").toString());
 	public static final Image JUMP = new Image(ClassLoader.getSystemResource("image/JUMP.png").toString());

@@ -11,27 +11,29 @@ import view.GameViewManager;
 
 public class StickMan{
 	
-	private static final Image[] toRight = {Character.walkR1,Character.walkR2,Character.walkR3};
-	private static final Image[] toLeft = {Character.walkL1,Character.walkL2,Character.walkL3};
+	private static final Image[] toRight = {Character.walkR1,Character.walkR2,Character.walkR3,Character.walkR1,Character.walkR2,Character.walkR3};
+	private static final Image[] toLeft = {Character.walkL1,Character.walkL2,Character.walkL3,Character.walkL1,Character.walkL2,Character.walkL3};
 	private static final Image[] punchLeft = {Character.punchL1,Character.punchL2};
 	private static final Image[] punchRight = {Character.punchR1,Character.punchR2};
 	private static final Image[] kickLeft = {Character.kickL1,Character.kickL2};
 	private static final Image[] kickRight = {Character.kickR1,Character.kickR2};
-	public static final int PUNCH_DAMAGE = 75;
-	public static final int KICK_DAMAGE = 40;
 	public static final int MAX_HP = 2000;
-	public static final double WALK_SPEED = 8;
+	public static int PUNCH_DAMAGE = 75;
+	public static int KICK_DAMAGE = 40;
+	public static int DEFENCE = 0;
+	public static double WALK_SPEED = 6;
 
 	private String name; 
 	private Image state;
 	private boolean alive, idle, walking, jumping, attacking, blocking, crouching;
+	private boolean buffedDamage, buffedDefence, buffedSpeed;
 	private int hp;
-	private double hpBar;
+	private double hpBar, damageBuffExpire, defenceBuffExpire, speedBuffExpire;
+	private double damageBuffDuration, defenceBuffDuration, speedBuffDuration;
 	private int actionCounter;
 	private double X,Y;
-	
 	private boolean jump,down;
-	private int n;
+	private int n, dv;
 	private Thread t;
 	
 	public StickMan(String name) {
@@ -43,7 +45,7 @@ public class StickMan{
 		state = Character.IDLE;
 		alive = true; idle = true;
 		walking = false; jumping = false; attacking = false; blocking = false;
-		actionCounter = 0;
+		actionCounter = 0; dv = 4;
 	}
 	public void punch(EnemyGrey target) {
 		if(target.isBlocking()) {
@@ -84,6 +86,7 @@ public class StickMan{
 	
 	public void takeDamage(int dmg) {
 		if(this.isBlocking()) return;
+		dmg -= DEFENCE;
 		if(dmg < 0) dmg = 0;
 		this.hp -= dmg;
 		this.updateHp();
@@ -113,16 +116,16 @@ public class StickMan{
 		X += WALK_SPEED;
 		if(X > GameViewManager.width - 60) X = GameViewManager.width - 60;
 		walking = true; idle = false; jumping = false; attacking = false; blocking = false;
-		state = toRight[actionCounter / 3];
-		actionCounter = (actionCounter + 1) % 9;
+		state = toRight[actionCounter / dv];
+		actionCounter = (actionCounter + 1) % (3*dv);
 	}
 	
 	public void walkLeft() {
 		X -= WALK_SPEED;
 		if(X < 0) X = 0;
 		walking = true; idle = false; jumping = false; attacking = false; blocking = false;
-		state = toLeft[actionCounter / 3];
-		actionCounter = (actionCounter + 1) % 9;
+		state = toLeft[actionCounter / dv];
+		actionCounter = (actionCounter + 1) % (3*dv);
 	}
 	
 	public void punchLeft() {
@@ -284,7 +287,10 @@ public class StickMan{
 		return hp;
 	}
 	public void setHp(int hp) {
+		if(hp < 0) hp = 0;
+		if(hp > MAX_HP) hp = MAX_HP;
 		this.hp = hp;
+		updateHp();
 	}
 	public double getX() {
 		return X;
@@ -312,6 +318,9 @@ public class StickMan{
 		gc.drawImage(state,X,Y,Character.WIDTH,Character.HEIGHT);
 		gc.fillRoundRect(X, Y - 10, hpBar, 5, 5, 5);
 		gc.strokeText(name, X + 4.2*(7-name.length()), Y - 20);
+		if(buffedDamage) gc.drawImage(Character.SOLID_RED, X, Y - 15 , (damageBuffDuration*20.0) / 5.0 , 5);
+		if(buffedDefence) gc.drawImage(Character.SOLID_BLUE, X + 20, Y - 15 , (defenceBuffDuration*20.0) / 5.0 , 5);
+		if(buffedSpeed) gc.drawImage(Character.SOLID_YELLOW, X + 40, Y - 15 , (speedBuffDuration*20.0) / 5.0 , 5);
 	}
 	public boolean isBlocking() {
 		return blocking;
@@ -327,4 +336,77 @@ public class StickMan{
 		this.crouching = crouching;
 	}
 
+	public void increaseDamage() {
+		PUNCH_DAMAGE = 120;
+		KICK_DAMAGE = 60;
+	}
+	public void decreaseDamage() {
+		PUNCH_DAMAGE = 75;
+		KICK_DAMAGE = 40;
+	}
+	public void increaseDefence() {
+		DEFENCE = 30;
+	}
+	public void decreaseDefence() {
+		DEFENCE = 0;
+	}
+	public void increaseSpeed() {
+		WALK_SPEED = 10; dv = 2;
+	}
+	public void decreaseSpeed() {
+		WALK_SPEED = 6; dv = 4;
+	}
+	public void manageBuff(double time) {
+		damageBuffDuration = damageBuffExpire - time;
+		defenceBuffDuration = defenceBuffExpire - time;
+		speedBuffDuration = speedBuffExpire - time;
+		if(damageBuffDuration < 0.0) damageBuffDuration = 0.0;
+		if(defenceBuffDuration < 0.0) defenceBuffDuration = 0.0;
+		if(speedBuffDuration < 0.0) speedBuffDuration = 0.0;
+		if(time > damageBuffExpire && this.buffedDamage) {
+			this.decreaseDamage(); this.setBuffedDamage(false);
+		}
+		if(time > defenceBuffExpire && this.buffedDefence) {
+			this.decreaseDefence(); this.setBuffedDefence(false);
+		}
+		if(time > speedBuffExpire && this.buffedSpeed) {
+			this.decreaseSpeed(); this.setBuffedSpeed(false);
+		}
+	}
+	public boolean isBuffedDamage() {
+		return buffedDamage;
+	}
+	public void setBuffedDamage(boolean buffedDamage) {
+		this.buffedDamage = buffedDamage;
+	}
+	public boolean isBuffedDefence() {
+		return buffedDefence;
+	}
+	public void setBuffedDefence(boolean buffedDefence) {
+		this.buffedDefence = buffedDefence;
+	}
+	public boolean isBuffedSpeed() {
+		return buffedSpeed;
+	}
+	public void setBuffedSpeed(boolean buffedSpeed) {
+		this.buffedSpeed = buffedSpeed;
+	}
+	public double getDamageBuffExpire() {
+		return damageBuffExpire;
+	}
+	public void setDamageBuffExpire(double damageBuffExpire) {
+		this.damageBuffExpire = damageBuffExpire;
+	}
+	public double getDefenceBuffExpire() {
+		return defenceBuffExpire;
+	}
+	public void setDefenceBuffExpire(double defenceBuffExpire) {
+		this.defenceBuffExpire = defenceBuffExpire;
+	}
+	public double getSpeedBuffExpire() {
+		return speedBuffExpire;
+	}
+	public void setSpeedBuffExpire(double speedBuffExpire) {
+		this.speedBuffExpire = speedBuffExpire;
+	}
 }

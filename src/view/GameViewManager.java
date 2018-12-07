@@ -5,6 +5,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.sun.scenario.DelayedRunnable;
 
+import buff.Buffs;
+import buff.DamageBuff;
+import buff.DefenceBuff;
+import buff.HealBuff;
+import buff.SpeedBuff;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -47,8 +52,9 @@ public class GameViewManager extends ViewManager{
 	private ArrayList<EnemyRed> RedBot;
 	private ArrayList<EnemyBlue> BlueBot;
 	private ArrayList<EnemyGrey> GreyBot;
+	private ArrayList<Buffs> buffs;
 	private CopyOnWriteArrayList<Missile> missiles;
-	int lastAddRed, lastAddBlue, lastAddGrey, lastAddMissile;
+	int lastAddRed, lastAddBlue, lastAddGrey, lastAddMissile, lastAddBuff;
 	boolean redWasFilled, blueWasFilled, greyWasFilled;
 	private Thread t;
 	private ArrayList<String> input;
@@ -67,7 +73,8 @@ public class GameViewManager extends ViewManager{
 		BlueBot = new ArrayList<EnemyBlue>();
 		GreyBot = new ArrayList<EnemyGrey>();
 		missiles = new CopyOnWriteArrayList<Missile>();
-		lastAddRed = 0; lastAddBlue = 0; lastAddGrey = 0; lastAddMissile = 0;
+		buffs = new ArrayList<Buffs>();
+		lastAddRed = 0; lastAddBlue = 0; lastAddGrey = 0; lastAddMissile = 0; lastAddBuff = 0;
 		redWasFilled = false; blueWasFilled = false; greyWasFilled = false;
 		input = new ArrayList<String>();
 	}
@@ -358,6 +365,14 @@ public class GameViewManager extends ViewManager{
 					missiles.add(new Missile());
 					lastAddMissile = (int) time;
 				}
+				if(((int) time) % 5 == 0 && ((int) time) != lastAddBuff) {
+					double temp = Math.random();
+					if(temp < 0.25) buffs.add(new DamageBuff());
+					else if(temp < 0.50) buffs.add(new DefenceBuff());
+					else if(temp < 0.75) buffs.add(new SpeedBuff());
+					else if(temp < 1.00) buffs.add(new HealBuff());
+					lastAddBuff= (int) time;
+				}
 				if(((int) time) % 17 == 0 && (int) time != lastAddRed  && !redWasFilled) {
 					if(RedBot.size() < 5)  RedBot.add(new EnemyRed());
 					if(RedBot.size() == 5) redWasFilled = true;
@@ -446,14 +461,22 @@ public class GameViewManager extends ViewManager{
 					temp.act();
 					temp.draw(gc);
 				}
+				for(int i = buffs.size() - 1; i >= 0; i--) {
+					Buffs b = buffs.get(i);
+					b.move();
+					b.draw(gc);
+					if(b.pickUpBy(playerCharacter, time)) buffs.remove(b);
+				}
 				
 				for(int i = missiles.size() - 1; i >= 0; i--) {
 					Missile M = missiles.get(i);
 					M.draw(gc);
 					if(M.move()) {
-						missiles.remove(i);
+						missiles.remove(M);
+						continue;
 					}
-					if(M.checkHit(playerCharacter) && !(M.isExplode)) { 
+					else if(!M.isExplode) {
+						if(M.checkHit(playerCharacter)) { 
 						M.isExplode = true;
 						t = new Thread(() -> {
 							try {
@@ -466,7 +489,7 @@ public class GameViewManager extends ViewManager{
 									M.setBomb(-80,30,0);
 								}
 								M.setSize(100,100);
-								Thread.sleep(1500);
+								Thread.sleep(500);
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
@@ -475,7 +498,8 @@ public class GameViewManager extends ViewManager{
 						t.start();
 					}
 				}
-				
+				}
+				playerCharacter.manageBuff(time);
 				playerCharacter.draw(gc);
 				gc.strokeText(String.format("Time: %.2f", time),20,20);
 				

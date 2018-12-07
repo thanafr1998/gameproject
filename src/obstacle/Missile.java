@@ -23,7 +23,7 @@ public class Missile {
 		double temp = Math.random();
 		if(temp < 0.5) { //L to R
 			ms = Character.MISSILE_R;
-			X = -100;
+			X = -200;
 		}else { //R to L
 			ms = Character.MISSILE_L;
 			X = GameViewManager.width + 100;
@@ -39,19 +39,20 @@ public class Missile {
 	public boolean move() {
 		X += vX;
 		if(vX > 0 && X > GameViewManager.width) return true;
-		if(vX < 0 && X < 0) return true;
+		if(vX < 0 && X < -110) return true;
 		return false;
 	}
 	
 	public boolean checkHit(StickMan sm) {
+
 		if(vX > 0) {
 			if(Y == sm.getY() && !sm.isCrouching() && X > sm.getX() - width && X < sm.getX() + Character.WIDTH) {
-				sm.takeDamage(sm.getHp() / 2);
+				sm.takeDamage(sm.getHp() / 5);
 				return true;
 			}
 		}else {
 			if(Y == sm.getY() && !sm.isCrouching() && X > sm.getX() - width && X < sm.getX() + Character.WIDTH) {
-				sm.takeDamage(sm.getHp() / 2);
+				sm.takeDamage(sm.getHp() / 5);
 				return true;
 			}
 		}
