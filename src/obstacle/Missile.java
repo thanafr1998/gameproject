@@ -41,12 +41,12 @@ public class Missile {
 	
 	public boolean checkHit(StickMan sm) {
 		if(vX > 0) {
-			if(Y == sm.getY() && !sm.isCrouching() && X + width > sm.getX() && X + width < sm.getX() + Character.WIDTH) {
+			if(Y == sm.getY() && !sm.isCrouching() && X > sm.getX() - width && X < sm.getX() + Character.WIDTH) {
 				sm.takeDamage(sm.getHp() / 2);
 				return true;
 			}
 		}else {
-			if(Y == sm.getY() && !sm.isCrouching() && X > sm.getX() && X < sm.getX() + Character.WIDTH) {
+			if(Y == sm.getY() && !sm.isCrouching() && X > sm.getX() - width && X < sm.getX() + Character.WIDTH) {
 				sm.takeDamage(sm.getHp() / 2);
 				return true;
 			}

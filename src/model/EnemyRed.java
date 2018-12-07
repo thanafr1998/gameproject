@@ -14,7 +14,7 @@ public class EnemyRed {
 	private static final Image[] kickRight = {Character.RED_kickR1,Character.RED_kickR2};
 	public static final int PUNCH_DAMAGE = 120;
 	public static final int KICK_DAMAGE = 70;
-	public static final int MAX_HP = 200;
+	public static final int MAX_HP = 250;
 	public static final double WALK_SPEED = 6.5;
 	
 	private Thread t;
