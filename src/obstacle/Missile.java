@@ -2,6 +2,7 @@ package obstacle;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 import model.Character;
 import model.Sound;
 import model.StickMan;
@@ -70,8 +71,9 @@ public class Missile {
 		return vX;
 	}
 	
-	public void setBomb(int i,int j) {
+	public void setBomb(int i,int j, int v) {
 		X += i;
-		vX = j;
+		Y -= j;
+		vX = v;
 	}
 }

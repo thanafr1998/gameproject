@@ -450,7 +450,9 @@ public class GameViewManager extends ViewManager{
 				for(int i = missiles.size() - 1; i >= 0; i--) {
 					Missile M = missiles.get(i);
 					M.draw(gc);
-					if(M.move()) missiles.remove(i);
+					if(M.move()) {
+						missiles.remove(i);
+					}
 					if(M.checkHit(playerCharacter) && !(M.isExplode)) { 
 						M.isExplode = true;
 						t = new Thread(() -> {
@@ -458,13 +460,13 @@ public class GameViewManager extends ViewManager{
 								M.setImage(new Image(ClassLoader.getSystemResource("image/EXPLOSION.png").toString()));
 								Sound.explosionSound.play();
 								if(M.getVX() > 0) {
-									M.setBomb(80, 0);
+									M.setBomb(80,30,0);
 								}
 								else{
-									M.setBomb(-80, 0);
+									M.setBomb(-80,30,0);
 								}
 								M.setSize(100,100);
-								Thread.sleep(2000);
+								Thread.sleep(1500);
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
