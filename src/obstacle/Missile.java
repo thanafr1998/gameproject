@@ -2,17 +2,20 @@ package obstacle;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 import model.Character;
+import model.Sound;
 import model.StickMan;
 import view.GameViewManager;
 
 public class Missile {
 
-	public static final int width = 100;
-	public static final int height = 25;
+	public int width = 100;
+	public int height = 25;
 	private int X,Y;
 	private int vX;
 	private Image ms;
+	public boolean isExplode;
 	
 	public Missile() {
 		Y = Character.FLOOR_LEVEL[(int) (Math.random()*3.0)];
@@ -26,6 +29,7 @@ public class Missile {
 			X = GameViewManager.width + 100;
 			vX = -vX;
 		}
+		isExplode = false;
 	}
 	
 	public void draw(GraphicsContext gc) {
@@ -52,5 +56,24 @@ public class Missile {
 			}
 		}
 		return false;
+	}
+	
+	public void setImage(Image image) {
+		ms = image;
+	}
+	
+	public void setSize(int i,int j) {
+		width = i;
+		height = j;
+	}
+	
+	public int getVX() {
+		return vX;
+	}
+	
+	public void setBomb(int i,int j, int v) {
+		X += i;
+		Y -= j;
+		vX = v;
 	}
 }

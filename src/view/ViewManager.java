@@ -41,11 +41,11 @@ public class ViewManager {
 	private List<GameButton> menuButtons;
 	private GameButton resumeButton;
 	
-	private String name = "";
+	public static String playerName = "";
 	
 	private subScene playSubScene;
 	private subScene howToPlaySubScene;
-	private subScene creditSubScene;
+	private subScene scoreSubScene;
 	private subScene exitSubScene;
 	private subScene showSubScene;
 	
@@ -63,21 +63,16 @@ public class ViewManager {
 
 		createSubScene();
 		createLogo();
-		
-		subScene sub = new subScene();
-		sub.setLayoutX(200);
-		sub.setLayoutY(100);
-		
 	}
 	
 	private void createSubScene() {
 		
 		howToPlaySubScene = new subScene();
-		creditSubScene = new subScene();
+		scoreSubScene = new subScene();
 		exitSubScene = new subScene();
 		createPlaySubScene();
 		mainPane.getChildren().add(howToPlaySubScene);
-		mainPane.getChildren().add(creditSubScene);
+		mainPane.getChildren().add(scoreSubScene);
 		mainPane.getChildren().add(exitSubScene);
 	}
 	
@@ -85,10 +80,12 @@ public class ViewManager {
 		playSubScene = new subScene();
 		InfoLabel label = new InfoLabel("Enter Your Name :");
 		GameButton enterButton = new GameButton("ENTER");
-		InputField enterName = new InputField("", "Enter Name (max 7 characters)");
+		InputField enterName = new InputField("Enter Name (max 7 characters)");
+		
+		label.setLayoutX(50);
 		
 		enterName.setLayoutX(100);
-		enterName.setLayoutY(100);
+		enterName.setLayoutY(125);
 		
 		enterButton.setFontSize(15);
 		enterButton.setPrefSize(190, 50);
@@ -99,12 +96,12 @@ public class ViewManager {
 			@Override
 			public void handle(MouseEvent event) {
 
-				name = enterName.getText();
-				if(name.equals("")) {
+				playerName = enterName.getText();
+				if(playerName.equals("")) {
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setContentText("Name cannot be blank");
 					alert.showAndWait();
-				}else if(name.length() > 7) {
+				}else if(playerName.length() > 7) {
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setContentText("Name is too long (max 7 characters)");
 					alert.showAndWait();
@@ -112,7 +109,7 @@ public class ViewManager {
 				else {
 					if(event.getButton().equals(MouseButton.PRIMARY)) {
 					resumeButton.setDisable(false);
-					gameViewManager = new GameViewManager(name);
+					gameViewManager = new GameViewManager(playerName);
 					gameViewManager.hideMenuScene(mainStage);
 
 					}
@@ -122,12 +119,12 @@ public class ViewManager {
 		});
 		
 		mainPane.getChildren().add(playSubScene);
-		playSubScene.getRoot2().getChildren().add(label);
-		playSubScene.getRoot2().getChildren().add(enterName);
-		playSubScene.getRoot2().getChildren().add(enterButton);
+		playSubScene.getRootSubScene().getChildren().add(label);
+		playSubScene.getRootSubScene().getChildren().add(enterName);
+		playSubScene.getRootSubScene().getChildren().add(enterButton);
 		
 	}
-	
+
 	public Stage getMainStage(){
 		return mainStage;
 	}
@@ -167,7 +164,7 @@ public class ViewManager {
 		createResumeButton();
 		createNewGameButton();
 		createHowToPlayButton();
-		createCreditButton();
+		createScoreButton();
 		createExitButton();
 	}
 	
@@ -198,16 +195,14 @@ public class ViewManager {
 		newGameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				
+
 				if(showSubScene == playSubScene) {
 					showSubScene = new subScene();
 				}else{
 					checkSubScene();
 					showSubScene = playSubScene;
 				}
-				
 				playSubScene.moveSubScene();
-				
 			}
 		});
 	}
@@ -231,21 +226,21 @@ public class ViewManager {
 		});
 	}
 	
-	private void createCreditButton() {
-		GameButton creditButton = new GameButton("Credit");
-		addMenuButton(creditButton);
+	private void createScoreButton() {
+		GameButton scoreButton = new GameButton("Score");
+		addMenuButton(scoreButton);
 		
-		creditButton.setOnAction(new EventHandler<ActionEvent>() {
+		scoreButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				if(showSubScene == creditSubScene) {
+				if(showSubScene == scoreSubScene) {
 					showSubScene = new subScene();
 				}else{
 					checkSubScene();
-					showSubScene = creditSubScene;
+					showSubScene = scoreSubScene;
 				}
 				
-				creditSubScene.moveSubScene();
+				scoreSubScene.moveSubScene();
 			}
 		});
 	}
@@ -267,8 +262,8 @@ public class ViewManager {
 			playSubScene.moveSubScene();
 		}else if(showSubScene == howToPlaySubScene) {
 			howToPlaySubScene.moveSubScene();
-		}else if(showSubScene == creditSubScene) {
-			creditSubScene.moveSubScene();
+		}else if(showSubScene == scoreSubScene) {
+			scoreSubScene.moveSubScene();
 		}else {
 			showSubScene = new subScene();
 		}
@@ -287,6 +282,5 @@ public class ViewManager {
 	public void setMenuButtons(List<GameButton> menuButtons) {
 		this.menuButtons = menuButtons;
 	}
-
 	
 }
