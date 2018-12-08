@@ -107,7 +107,7 @@ public class ViewManager {
 				}
 				else {
 					if(event.getButton().equals(MouseButton.PRIMARY)) {
-					resumeButton.setDisable(false);
+					//resumeButton.setDisable(false);
 					gameViewManager = new GameViewManager(playerName);
 					gameViewManager.hideMenuScene(mainStage);
 
@@ -160,7 +160,7 @@ public class ViewManager {
 	}
 	
 	private void createButton() {
-		createResumeButton();
+		//createResumeButton();
 		createNewGameButton();
 		createHowToPlayButton();
 		createScoreButton();

@@ -16,6 +16,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -46,7 +48,7 @@ public class GameViewManager extends ViewManager{
 	private Scene gameScene;
 	private Stage gameStage;
 	private Stage hideStage;
-	
+	private Thread g;
 	private GraphicsContext gc;
 	private StickMan playerCharacter;
 	private ArrayList<EnemyRed> RedBot;
@@ -59,8 +61,9 @@ public class GameViewManager extends ViewManager{
 	private Thread t;
 	private ArrayList<String> input;
 	private boolean attacked;
-
+	public AnimationTimer TIMER;
 	private GameButton button;
+	private boolean gamePaused;
 	
 	
 	public GameViewManager(String name) {
@@ -69,6 +72,7 @@ public class GameViewManager extends ViewManager{
 		createKeyListener();
 		createButton();
 		playerCharacter = new StickMan(name);
+		input = new ArrayList<String>();
 		RedBot = new ArrayList<EnemyRed>();
 		BlueBot = new ArrayList<EnemyBlue>();
 		GreyBot = new ArrayList<EnemyGrey>();
@@ -76,7 +80,7 @@ public class GameViewManager extends ViewManager{
 		buffs = new ArrayList<Buffs>();
 		lastAddRed = 0; lastAddBlue = 0; lastAddGrey = 0; lastAddMissile = 0; lastAddBuff = 0;
 		redWasFilled = false; blueWasFilled = false; greyWasFilled = false;
-		input = new ArrayList<String>();
+		gamePaused = false;
 	}
 
 	private void createButton() {
@@ -84,6 +88,7 @@ public class GameViewManager extends ViewManager{
 		button = new GameButton("MAINMENU");
 		button.setLayoutX(770);
 		button.setLayoutY(0);
+		button.setDisable(true); button.setVisible(false);
 		button.setOnMousePressed(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -353,159 +358,179 @@ public class GameViewManager extends ViewManager{
 		gc.setStroke(Color.DARKCYAN);
 		gc.setLineWidth(1);
 		gc.setFont(Font.font("Century", 15));
-		new AnimationTimer() {
-			public void handle(long currentNanoTime) {
-				gc.clearRect(0, 0, width, height);
-				gc.drawImage(Character.SOLID_GREY, 0, GameViewManager.height - 20 , GameViewManager.width, GameViewManager.GroundThickness);
-				gc.drawImage(Character.SOLID_GREY, 0, GameViewManager.height - 200, GameViewManager.width, GameViewManager.GroundThickness);
-				gc.drawImage(Character.SOLID_GREY, 0, GameViewManager.height - 400, GameViewManager.width, GameViewManager.GroundThickness);
-				double time = (currentNanoTime - startNanoTime) / 1000000000.0;
-				//Add new Red enemy
-				if(((int) time) % 3 == 0 && ((int) time) != lastAddMissile) {
-					missiles.add(new Missile());
-					lastAddMissile = (int) time;
-				}
-				if(((int) time) % 5 == 0 && ((int) time) != lastAddBuff) {
-					double temp = Math.random();
-					if(temp < 0.25) buffs.add(new DamageBuff());
-					else if(temp < 0.50) buffs.add(new DefenceBuff());
-					else if(temp < 0.75) buffs.add(new SpeedBuff());
-					else if(temp < 1.00) buffs.add(new HealBuff());
-					lastAddBuff= (int) time;
-				}
-				if(((int) time) % 17 == 0 && (int) time != lastAddRed  && !redWasFilled) {
-					if(RedBot.size() < 5)  RedBot.add(new EnemyRed());
-					if(RedBot.size() == 5) redWasFilled = true;
-					lastAddRed = (int) time;
-				}
-				//Add new Blue enemy
-				if(((int) time) % 26 == 0 && (int) time != lastAddBlue  && !blueWasFilled) {
-					if(BlueBot.size() < 5)  BlueBot.add(new EnemyBlue());
-					if(BlueBot.size() == 5) blueWasFilled = true;
-					lastAddBlue = (int) time;
-				}//Add new Grey enemy
-				if(((int) time) % 10 == 0 && (int) time != lastAddGrey  && !greyWasFilled) {
-					if(GreyBot.size() < 10)  GreyBot.add(new EnemyGrey());
-					if(GreyBot.size() == 10) greyWasFilled = true;
-					lastAddGrey = (int) time;
-				}
-				//random action for red then draw
-				for(int i = 0; i < RedBot.size(); i++) {
-					EnemyRed temp = RedBot.get(i);
-					if(temp.getY() == playerCharacter.getY()) {
-						double diffL = temp.getX() - playerCharacter.getX();
-						double diffR = playerCharacter.getX() - temp.getX();
-						if(diffL > 0 && diffL <= Character.ATTACK_RANGE) {
-							temp.randomAttackLeft(playerCharacter, (int) time);
-						}else if(diffR > 0 && diffR <= Character.ATTACK_RANGE) {
-							temp.randomAttackRight(playerCharacter, (int) time);
-						}else {
-							if(temp.getActionEnd() <= time) {
-								temp.randomAction(time);
-							}
+		g = new Thread( () -> {
+			try {
+			TIMER =	new AnimationTimer() {
+					public void handle(long currentNanoTime) {
+						if(!playerCharacter.isAlive()) { 
+							TIMER.stop();
+							Alert gameover = new Alert(Alert.AlertType.INFORMATION);
+							gameover.setTitle("GAMEOVER!");
+							gameover.setContentText("YOUE'RE DEAD...Good luck next time");
+							Platform.runLater(gameover::showAndWait);
+							hideGameScene();
 						}
-					}
-					else{
-						if(temp.getActionEnd() <= time) {
-							temp.randomAction(time);
+						gc.clearRect(0, 0, width, height);
+						gc.drawImage(Character.SOLID_GREY, 0, GameViewManager.height - 20 , GameViewManager.width, GameViewManager.GroundThickness);
+						gc.drawImage(Character.SOLID_GREY, 0, GameViewManager.height - 200, GameViewManager.width, GameViewManager.GroundThickness);
+						gc.drawImage(Character.SOLID_GREY, 0, GameViewManager.height - 400, GameViewManager.width, GameViewManager.GroundThickness);
+						double time = (currentNanoTime - startNanoTime) / 1000000000.0;
+						//Add new Red enemy
+						if(((int) time) % 3 == 0 && ((int) time) != lastAddMissile) {
+							missiles.add(new Missile());
+							lastAddMissile = (int) time;
 						}
-					}
-					temp.act();
-					temp.draw(gc);
-				}
-				//random action for blue then draw
-				for(int i = 0; i < BlueBot.size(); i++) {
-					EnemyBlue temp = BlueBot.get(i);
-					if(temp.getY() == playerCharacter.getY()) {
-						double diffL = temp.getX() - playerCharacter.getX();
-						double diffR = playerCharacter.getX() - temp.getX();
-						if(diffL > 0 && diffL <= Character.ATTACK_RANGE) {
-							temp.randomAttackLeft(playerCharacter, (int) time);
-						}else if(diffR > 0 && diffR <= Character.ATTACK_RANGE) {
-							temp.randomAttackRight(playerCharacter, (int) time);
-						}else {
-							if(temp.getActionEnd() <= time) {
-								temp.randomAction(time);
-							}
+						if(((int) time) % 5 == 0 && ((int) time) != lastAddBuff) {
+							double temp = Math.random();
+							if(temp < 0.25) buffs.add(new DamageBuff());
+							else if(temp < 0.50) buffs.add(new DefenceBuff());
+							else if(temp < 0.75) buffs.add(new SpeedBuff());
+							else if(temp < 1.00) buffs.add(new HealBuff());
+							lastAddBuff= (int) time;
 						}
-					}
-					else{
-						if(temp.getActionEnd() <= time) {
-							temp.randomAction(time);
+						if(((int) time) % 17 == 0 && (int) time != lastAddRed  && !redWasFilled) {
+							if(RedBot.size() < 5)  RedBot.add(new EnemyRed());
+							if(RedBot.size() == 5) redWasFilled = true;
+							lastAddRed = (int) time;
 						}
-					}
-					temp.act();
-					temp.draw(gc);
-				}
-				//random action for grey then draw
-				for(int i = 0; i < GreyBot.size(); i++) {
-					EnemyGrey temp = GreyBot.get(i);
-					if(temp.getY() == playerCharacter.getY()) {
-						double diffL = temp.getX() - playerCharacter.getX();
-						double diffR = playerCharacter.getX() - temp.getX();
-						if(diffL > 0 && diffL <= Character.ATTACK_RANGE) {
-							temp.randomAttackLeft(playerCharacter, (int) time);
-						}else if(diffR > 0 && diffR <= Character.ATTACK_RANGE) {
-							temp.randomAttackRight(playerCharacter, (int) time);
-						}else {
-							if(temp.getActionEnd() <= time) {
-								temp.randomAction(time);
-							}
+						//Add new Blue enemy
+						if(((int) time) % 26 == 0 && (int) time != lastAddBlue  && !blueWasFilled) {
+							if(BlueBot.size() < 5)  BlueBot.add(new EnemyBlue());
+							if(BlueBot.size() == 5) blueWasFilled = true;
+							lastAddBlue = (int) time;
+						}//Add new Grey enemy
+						if(((int) time) % 10 == 0 && (int) time != lastAddGrey  && !greyWasFilled) {
+							if(GreyBot.size() < 10)  GreyBot.add(new EnemyGrey());
+							if(GreyBot.size() == 10) greyWasFilled = true;
+							lastAddGrey = (int) time;
 						}
-					}
-					else{
-						if(temp.getActionEnd() <= time) {
-							temp.randomAction(time);
-						}
-					}
-					temp.act();
-					temp.draw(gc);
-				}
-				for(int i = buffs.size() - 1; i >= 0; i--) {
-					Buffs b = buffs.get(i);
-					b.move();
-					b.draw(gc);
-					if(b.pickUpBy(playerCharacter, time)) buffs.remove(b);
-				}
-				
-				for(int i = missiles.size() - 1; i >= 0; i--) {
-					Missile M = missiles.get(i);
-					M.draw(gc);
-					if(M.move()) {
-						missiles.remove(M);
-						continue;
-					}
-					else if(!M.isExplode) {
-						if(M.checkHit(playerCharacter)) { 
-						M.isExplode = true;
-						t = new Thread(() -> {
-							try {
-								M.setImage(new Image(ClassLoader.getSystemResource("image/EXPLOSION.png").toString()));
-								Sound.explosionSound.play();
-								if(M.getVX() > 0) {
-									M.setBomb(80,30,0);
+						//random action for red then draw
+						for(int i = 0; i < RedBot.size(); i++) {
+							EnemyRed temp = RedBot.get(i);
+							if(temp.getY() == playerCharacter.getY()) {
+								double diffL = temp.getX() - playerCharacter.getX();
+								double diffR = playerCharacter.getX() - temp.getX();
+								if(diffL > 0 && diffL <= Character.ATTACK_RANGE) {
+									temp.randomAttackLeft(playerCharacter, (int) time);
+								}else if(diffR > 0 && diffR <= Character.ATTACK_RANGE) {
+									temp.randomAttackRight(playerCharacter, (int) time);
+								}else {
+									if(temp.getActionEnd() <= time) {
+										temp.randomAction(time);
+									}
 								}
-								else{
-									M.setBomb(-80,30,0);
-								}
-								M.setSize(100,100);
-								Thread.sleep(500);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
 							}
-							missiles.remove(M);
-						});
-						t.start();
+							else{
+								if(temp.getActionEnd() <= time) {
+									temp.randomAction(time);
+								}
+							}
+							temp.act();
+							temp.draw(gc);
+						}
+						//random action for blue then draw
+						for(int i = 0; i < BlueBot.size(); i++) {
+							EnemyBlue temp = BlueBot.get(i);
+							if(temp.getY() == playerCharacter.getY()) {
+								double diffL = temp.getX() - playerCharacter.getX();
+								double diffR = playerCharacter.getX() - temp.getX();
+								if(diffL > 0 && diffL <= Character.ATTACK_RANGE) {
+									temp.randomAttackLeft(playerCharacter, (int) time);
+								}else if(diffR > 0 && diffR <= Character.ATTACK_RANGE) {
+									temp.randomAttackRight(playerCharacter, (int) time);
+								}else {
+									if(temp.getActionEnd() <= time) {
+										temp.randomAction(time);
+									}
+								}
+							}
+							else{
+								if(temp.getActionEnd() <= time) {
+									temp.randomAction(time);
+								}
+							}
+							temp.act();
+							temp.draw(gc);
+						}
+						//random action for grey then draw
+						for(int i = 0; i < GreyBot.size(); i++) {
+							EnemyGrey temp = GreyBot.get(i);
+							if(temp.getY() == playerCharacter.getY()) {
+								double diffL = temp.getX() - playerCharacter.getX();
+								double diffR = playerCharacter.getX() - temp.getX();
+								if(diffL > 0 && diffL <= Character.ATTACK_RANGE) {
+									temp.randomAttackLeft(playerCharacter, (int) time);
+								}else if(diffR > 0 && diffR <= Character.ATTACK_RANGE) {
+									temp.randomAttackRight(playerCharacter, (int) time);
+								}else {
+									if(temp.getActionEnd() <= time) {
+										temp.randomAction(time);
+									}
+								}
+							}
+							else{
+								if(temp.getActionEnd() <= time) {
+									temp.randomAction(time);
+								}
+							}
+							temp.act();
+							temp.draw(gc);
+						}
+						for(int i = buffs.size() - 1; i >= 0; i--) {
+							Buffs b = buffs.get(i);
+							b.move();
+							b.draw(gc);
+							if(b.pickUpBy(playerCharacter, time)) buffs.remove(b);
+						}
+						
+						for(int i = missiles.size() - 1; i >= 0; i--) {
+							Missile M = missiles.get(i);
+							M.draw(gc);
+							if(M.move()) {
+								missiles.remove(M);
+								continue;
+							}
+							else if(!M.isExplode) {
+								if(M.checkHit(playerCharacter)) { 
+								M.isExplode = true;
+								t = new Thread(() -> {
+									try {
+										M.setImage(new Image(ClassLoader.getSystemResource("image/EXPLOSION.png").toString()));
+										Sound.explosionSound.play();
+										if(M.getVX() > 0) {
+											M.setBomb(80,30,0);
+										}
+										else{
+											M.setBomb(-80,30,0);
+										}
+										M.setSize(100,100);
+										Thread.sleep(500);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
+									missiles.remove(M);
+								});
+								t.start();
+							}
+						}
+						}
+						playerCharacter.manageBuff(time);
+						playerCharacter.draw(gc);
+						gc.strokeText(String.format("Time: %.2f", time),20,20);
+						
 					}
-				}
-				}
-				playerCharacter.manageBuff(time);
-				playerCharacter.draw(gc);
-				gc.strokeText(String.format("Time: %.2f", time),20,20);
-				
+					
+				};
+				TIMER.start();
+				Alert gameover = new Alert(AlertType.INFORMATION);
+				gameover.setContentText("GAME OVER...YOUE'RE DEAD!");
+				gameover.showAndWait();
+				g.interrupt();
 			}
-			
-		}.start();
+			catch(Exception e) {
+			}
+		} );
+		g.start();
 		gameStage.show();
 	}
 
