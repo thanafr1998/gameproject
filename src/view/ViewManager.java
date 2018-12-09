@@ -61,7 +61,7 @@ public class ViewManager {
 		createButton();
 		createBackground();
 		createSubScene();
-		createLogo();
+		//createLogo();
 	}
 	
 	private void createSubScene() {
@@ -87,7 +87,7 @@ public class ViewManager {
 		enterName.setLayoutY(125);
 		
 		enterButton.setFontSize(15);
-		enterButton.setPrefSize(190, 50);
+		enterButton.setPrefSize(190, 45);
 		enterButton.setLayoutX(250);
 		enterButton.setLayoutY(200);
 		enterButton.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -196,12 +196,13 @@ public class ViewManager {
 			public void handle(ActionEvent event) {
 
 				if(showSubScene == playSubScene) {
+					playSubScene.moveSubScene();
 					showSubScene = new subScene();
 				}else{
 					checkSubScene();
+					playSubScene.moveSubScene();
 					showSubScene = playSubScene;
 				}
-				playSubScene.moveSubScene();
 			}
 		});
 	}
@@ -214,13 +215,13 @@ public class ViewManager {
 			@Override
 			public void handle(ActionEvent event) {
 				if(showSubScene == howToPlaySubScene) {
+					howToPlaySubScene.moveSubScene();
 					showSubScene = new subScene();
 				}else{
 					checkSubScene();
+					howToPlaySubScene.moveSubScene();
 					showSubScene = howToPlaySubScene;
 				}
-				
-				howToPlaySubScene.moveSubScene();
 			}
 		});
 	}
@@ -233,13 +234,13 @@ public class ViewManager {
 			@Override
 			public void handle(ActionEvent event) {
 				if(showSubScene == scoreSubScene) {
+					scoreSubScene.moveSubScene();
 					showSubScene = new subScene();
 				}else{
 					checkSubScene();
+					scoreSubScene.moveSubScene();
 					showSubScene = scoreSubScene;
 				}
-				
-				scoreSubScene.moveSubScene();
 			}
 		});
 	}
