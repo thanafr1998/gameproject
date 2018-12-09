@@ -13,4 +13,5 @@ public class Sound {
 	public static AudioClip missSound = new AudioClip(ClassLoader.getSystemResource("audio/miss.wav").toString());
 	
 	public static AudioClip explosionSound = new AudioClip(ClassLoader.getSystemResource("audio/explosion.wav").toString());
+	
 }

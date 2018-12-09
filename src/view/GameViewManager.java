@@ -44,19 +44,23 @@ public class GameViewManager extends ViewManager{
 	public static final int width = 960;
 	public static final int height = 600;
 	public static final int GroundThickness = 20;
+	
 	private AnchorPane gamePane;
 	private Scene gameScene;
 	private Stage gameStage;
 	private Stage hideStage;
+	
 	private Thread g;
 	private GraphicsContext gc;
+	
 	private StickMan playerCharacter;
 	private ArrayList<EnemyRed> RedBot;
 	private ArrayList<EnemyBlue> BlueBot;
 	private ArrayList<EnemyGrey> GreyBot;
 	private ArrayList<Buffs> buffs;
 	private CopyOnWriteArrayList<Missile> missiles;
-	int lastAddRed, lastAddBlue, lastAddGrey, lastAddMissile, lastAddBuff;
+	
+	int lastAddRed, lastAddBlue, lastAddGrey, lastAddMissile, lastAddBuff, score;
 	boolean redWasFilled, blueWasFilled, greyWasFilled;
 	private Thread t;
 	private ArrayList<String> input;
@@ -66,19 +70,19 @@ public class GameViewManager extends ViewManager{
 	private boolean gamePaused;
 	
 	
-	public GameViewManager(String name) {
+	public GameViewManager(String playerName) {
 			
 		InitializeStage();
 		createKeyListener();
-		createButton();
-		playerCharacter = new StickMan(name);
+		//createButton();
+		playerCharacter = new StickMan(playerName);
 		input = new ArrayList<String>();
 		RedBot = new ArrayList<EnemyRed>();
 		BlueBot = new ArrayList<EnemyBlue>();
 		GreyBot = new ArrayList<EnemyGrey>();
 		missiles = new CopyOnWriteArrayList<Missile>();
 		buffs = new ArrayList<Buffs>();
-		lastAddRed = 0; lastAddBlue = 0; lastAddGrey = 0; lastAddMissile = 0; lastAddBuff = 0;
+		lastAddRed = 0; lastAddBlue = 0; lastAddGrey = 0; lastAddMissile = 0; lastAddBuff = 0; score = 0;
 		redWasFilled = false; blueWasFilled = false; greyWasFilled = false;
 		gamePaused = false;
 	}
@@ -88,7 +92,6 @@ public class GameViewManager extends ViewManager{
 		button = new GameButton("MAINMENU");
 		button.setLayoutX(770);
 		button.setLayoutY(0);
-		button.setDisable(true); button.setVisible(false);
 		button.setOnMousePressed(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -115,6 +118,7 @@ public class GameViewManager extends ViewManager{
 					input.add(k);
 				}
 				if(input.contains("J") && input.contains("A") && !playerCharacter.isAttacking() && !attacked) {
+					Sound.missSound.play(0.5);
 					playerCharacter.setAttacking(true);
 					attacked = true;
 					t = new Thread(() -> {
@@ -154,6 +158,7 @@ public class GameViewManager extends ViewManager{
 						}
 					}
 				}else if(input.contains("L") && input.contains("A") && !playerCharacter.isAttacking() && !attacked) {
+					Sound.missSound.play(0.5);
 					attacked = true;
 					playerCharacter.setAttacking(true);
 					t = new Thread(() -> {
@@ -193,6 +198,7 @@ public class GameViewManager extends ViewManager{
 						}
 					}
 				}if(input.contains("J") && input.contains("S") && !playerCharacter.isAttacking() && !attacked) {
+					Sound.missSound.play(0.5);
 					playerCharacter.setAttacking(true);
 					attacked = true;
 					t = new Thread(() -> {
@@ -232,6 +238,7 @@ public class GameViewManager extends ViewManager{
 						}
 					}
 				}else if(input.contains("L") && input.contains("S") && !playerCharacter.isAttacking() && !attacked) {
+					Sound.missSound.play(0.5);
 					attacked = true;
 					playerCharacter.setAttacking(true);
 					t = new Thread(() -> {
@@ -350,9 +357,9 @@ public class GameViewManager extends ViewManager{
 		start(gameStage);
 		
 	}
-	
+
 	private void start(Stage gameStage) {
-		gameStage.setTitle("Rambo Stackman");
+		gameStage.setTitle("Rambo Stickman");
 		final long startNanoTime = System.nanoTime();
 		gc.setFill(Color.BLUEVIOLET);
 		gc.setStroke(Color.DARKCYAN);
@@ -496,13 +503,8 @@ public class GameViewManager extends ViewManager{
 								t = new Thread(() -> {
 									try {
 										M.setImage(new Image(ClassLoader.getSystemResource("image/EXPLOSION.png").toString()));
-										Sound.explosionSound.play();
-										if(M.getVX() > 0) {
-											M.setBomb(80,30,0);
-										}
-										else{
-											M.setBomb(-80,30,0);
-										}
+										Sound.explosionSound.play(0.2);
+										M.setBomb(playerCharacter.getX()-20,playerCharacter.getY()-20);
 										M.setSize(100,100);
 										Thread.sleep(500);
 									} catch (InterruptedException e) {
@@ -523,6 +525,7 @@ public class GameViewManager extends ViewManager{
 				};
 				TIMER.start();
 				Alert gameover = new Alert(AlertType.INFORMATION);
+				//Sound.endGameSound.play();
 				gameover.setContentText("GAME OVER...YOUE'RE DEAD!");
 				gameover.showAndWait();
 				g.interrupt();

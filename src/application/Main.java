@@ -12,7 +12,7 @@ public class Main extends Application {
 		try {
 			ViewManager view = new ViewManager();
 			primaryStage = view.getMainStage();
-			primaryStage.setTitle("Rambo Stackman");
+			primaryStage.setTitle("Rambo Stickman");
 			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch(Exception e) {

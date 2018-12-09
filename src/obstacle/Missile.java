@@ -12,7 +12,7 @@ public class Missile {
 
 	public int width = 100;
 	public int height = 25;
-	private int X,Y;
+	private double X,Y;
 	private int vX;
 	private Image ms;
 	public boolean isExplode;
@@ -72,10 +72,10 @@ public class Missile {
 		return vX;
 	}
 	
-	public void setBomb(int i,int j, int v) {
-		X += i;
-		Y -= j;
-		vX = v;
+	public void setBomb(double i,double j) {
+		X = i;
+		Y = j;
+		vX = 0;
 	}
 
 }

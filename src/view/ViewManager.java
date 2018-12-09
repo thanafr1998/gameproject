@@ -7,6 +7,8 @@ import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 //import javafx.scene.canvas.Canvas;
 //import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
@@ -22,15 +24,18 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import model.GameButton;
 import model.InfoLabel;
 import model.InputField;
+import model.Sound;
 import model.StickMan;
+import model.ScoreBoard;
 import model.subScene;
 
 public class ViewManager {
 
-	private static final int width = 960;
+	private static final int width = 950;
 	private static final int height = 580;
 	private AnchorPane mainPane;
 	private Scene mainScene;
@@ -46,7 +51,6 @@ public class ViewManager {
 	private subScene playSubScene;
 	private subScene howToPlaySubScene;
 	private subScene scoreSubScene;
-	private subScene exitSubScene;
 	private subScene showSubScene;
 	
 	private GameViewManager gameViewManager;
@@ -67,12 +71,9 @@ public class ViewManager {
 	private void createSubScene() {
 		
 		howToPlaySubScene = new subScene();
-		scoreSubScene = new subScene();
-		exitSubScene = new subScene();
 		createPlaySubScene();
+		createScoreSubScene();
 		mainPane.getChildren().add(howToPlaySubScene);
-		mainPane.getChildren().add(scoreSubScene);
-		mainPane.getChildren().add(exitSubScene);
 	}
 	
 	private void createPlaySubScene() {
@@ -96,6 +97,7 @@ public class ViewManager {
 			public void handle(MouseEvent event) {
 
 				playerName = enterName.getText();
+				Sound.pressSound.play(0.5);
 				if(playerName.equals("")) {
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setContentText("Name cannot be blank");
@@ -107,9 +109,9 @@ public class ViewManager {
 				}
 				else {
 					if(event.getButton().equals(MouseButton.PRIMARY)) {
-					//resumeButton.setDisable(false);
-					gameViewManager = new GameViewManager(playerName);
-					gameViewManager.hideMenuScene(mainStage);
+						//resumeButton.setDisable(false);
+						gameViewManager = new GameViewManager(playerName);
+						gameViewManager.hideMenuScene(mainStage);
 
 					}
 				}
@@ -124,6 +126,13 @@ public class ViewManager {
 		
 	}
 
+	private void createScoreSubScene() {
+		scoreSubScene = new ScoreBoard();
+		InfoLabel label = new InfoLabel("HighScore :",50,0);
+		
+		mainPane.getChildren().add(scoreSubScene);
+		scoreSubScene.getRootSubScene().getChildren().add(label);
+	}
 	public Stage getMainStage(){
 		return mainStage;
 	}
