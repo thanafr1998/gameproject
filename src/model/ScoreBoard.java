@@ -36,7 +36,7 @@ public class ScoreBoard extends MySubScene{
 		gc = canvas.getGraphicsContext2D();
 		playerDataList = new ArrayList<Pair<String, Integer>>();
 		score = 0;
-		readHallOfFame();
+		readScore();
 		fillText();
 		root.getChildren().addAll(canvas);
 		
@@ -51,14 +51,14 @@ public class ScoreBoard extends MySubScene{
 	}
 	
 	public static void clearScore() throws FileNotFoundException, UnsupportedEncodingException {
-		PrintWriter writer = new PrintWriter(ClassLoader.getSystemResource("res/score.txt").toString());
+		PrintWriter writer = new PrintWriter("res/score.txt");
 		writer.println();
 		writer.close();
 	}
 	
 	public static void save(){      
 		try {
-			PrintWriter fw = new PrintWriter("res/score.txt");
+			PrintWriter fw = new PrintWriter(ClassLoader.getSystemResource("res/score.txt").toExternalForm());
 			BufferedWriter bw = new BufferedWriter(fw);
 	        for(int i = 0;i < playerDataList.size();i++)
 	        {
@@ -103,8 +103,8 @@ public class ScoreBoard extends MySubScene{
         });
 	}
 	
-	public static void readHallOfFame(){
-		try (BufferedReader reader = new BufferedReader(new FileReader(new File(ClassLoader.getSystemResource("res/score.txt").toString())))) {
+	public static void readScore(){
+		try (BufferedReader reader = new BufferedReader(new FileReader(new File("res/score.txt")))) {
 	        String line;
 	        while ((line = reader.readLine()) != null)
 	        {
