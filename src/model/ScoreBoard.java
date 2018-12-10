@@ -71,11 +71,7 @@ public class ScoreBoard extends MySubScene{
 	        e.printStackTrace();
 	    }
     }
-	
-	public static int getSize() {
-		return playerDataList.size();
-	}
-	
+
 	public static void addList(String playerName, int score) {
 		playerDataList.add(new Pair<String, Integer>(playerName, score));
 		sortList();
