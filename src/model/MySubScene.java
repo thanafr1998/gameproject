@@ -28,16 +28,6 @@ public class MySubScene extends SubScene{
 		subSceneIsHidden = true;
 		
 		rootSubScene.setBackground(new Background(backgroundImage));
-		
-		TextFlow t = new TextFlow();
-		Text L1 = new Text("\n\tuse\t'J'\tto move left\n\tuse\t'L'\tto move right\n"); L1.setFont(new Font(20));
-		Text L2 = new Text("\tuse\t'I'\tto jump up\n\tuse\t'K'\tto drop down\n");	L2.setFont(new Font(20));
-		Text L3 = new Text("\tuse\t'A'\tto punch\n\tuse\t'S'\tto kick\n");				L3.setFont(new Font(20));
-		Text L4 = new Text("\tuse\t'D'\tto block\n\tuse\t'C'\tto crouch\n");			L4.setFont(new Font(20));
-		Text L5 = new Text("\t*Note: attack keys must be used with move keys\n");	L5.setFont(new Font(20));
-		t.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-		t.getChildren().addAll(L1,L2,L3,L4,L5);
-		rootSubScene.getChildren().addAll(t);
 		setLayoutX(1000);
 		setLayoutY(100);
 		
