@@ -129,7 +129,6 @@ public class ViewManager {
 	private void createScoreSubScene() {
 		scoreSubScene = new ScoreBoard();
 		InfoLabel label = new InfoLabel("HighScore :",50,0);
-		
 		mainPane.getChildren().add(scoreSubScene);
 		scoreSubScene.getRootSubScene().getChildren().add(label);
 	}

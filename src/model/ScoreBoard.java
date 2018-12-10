@@ -22,7 +22,8 @@ public class ScoreBoard extends MySubScene{
 	public static Pane root;
 	private static Canvas canvas;
 	private static GraphicsContext gc;
-	private static final int HALLOFFAMENUMBER = 5;
+	private static final int RANKNUMBER = 5;
+	private static double score;
 	
 	public ScoreBoard(){
 		super();
@@ -30,6 +31,7 @@ public class ScoreBoard extends MySubScene{
 		canvas = new Canvas(500,300);
 		gc = canvas.getGraphicsContext2D();
 		playerDataList = new ArrayList<Pair<String, Integer>>();
+		score = 0;
 		
 		readScore();
 		fillText();
@@ -39,7 +41,7 @@ public class ScoreBoard extends MySubScene{
 	}
 	
 	public static void fillText(){
-		for(int i = 0;i < HALLOFFAMENUMBER && i < playerDataList.size();i++){
+		for(int i = 0;i < RANKNUMBER && i < playerDataList.size();i++){
 			gc.fillText("Rank "+(i+1)+": "+playerDataList.get(i).getKey()+" "+playerDataList.get(i).getValue(), 434, 218+84*i);
 		}
 	}
@@ -61,7 +63,7 @@ public class ScoreBoard extends MySubScene{
 		return playerDataList.size();
 	}
 	
-	private static void addList(String playerName, int score) {
+	public static void addList(String playerName, int score) {
 		playerDataList.add(new Pair<String, Integer>(playerName, score));
 		sortList();
 	}
@@ -103,5 +105,12 @@ public class ScoreBoard extends MySubScene{
 	        e.printStackTrace();
 	    }
 	}
+	
+	public static void increaseScore(double point) {
+		score += point ; 
+	}
 
+	public static double getScore() {
+		return score;
+	}
 }

@@ -36,6 +36,7 @@ import model.Sound;
 import model.StickMan;
 import model.Character;
 import model.MySubScene;
+import model.ScoreBoard;
 import obstacle.Missile;
 import exception.*;
 
@@ -60,7 +61,7 @@ public class GameViewManager extends ViewManager{
 	private ArrayList<Buffs> buffs;
 	private CopyOnWriteArrayList<Missile> missiles;
 	
-	private int lastAddRed, lastAddBlue, lastAddGrey, lastAddMissile, lastAddBuff, score;
+	private int lastAddRed, lastAddBlue, lastAddGrey, lastAddMissile, lastAddBuff;
 	private boolean redWasFilled, blueWasFilled, greyWasFilled;
 	private ArrayList<String> input;
 	private boolean attacked;
@@ -81,7 +82,7 @@ public class GameViewManager extends ViewManager{
 		GreyBot = new ArrayList<EnemyGrey>();
 		missiles = new CopyOnWriteArrayList<Missile>();
 		buffs = new ArrayList<Buffs>();
-		lastAddRed = 0; lastAddBlue = 0; lastAddGrey = 0; lastAddMissile = 0; lastAddBuff = 0; score = 0;
+		lastAddRed = 0; lastAddBlue = 0; lastAddGrey = 0; lastAddMissile = 0; lastAddBuff = 0;
 		redWasFilled = false; blueWasFilled = false; greyWasFilled = false;
 		gamePaused = false;
 	}
@@ -503,7 +504,7 @@ public class GameViewManager extends ViewManager{
 								t = new Thread(() -> {
 									try {
 										M.setImage(new Image(ClassLoader.getSystemResource("image/EXPLOSION.png").toString()));
-										Sound.explosionSound.play(0.2);
+										Sound.explosionSound.play(0.5);
 										M.setBomb(playerCharacter.getX()-20,playerCharacter.getY()-20);
 										M.setSize(100,100);
 										Thread.sleep(500);
@@ -519,7 +520,10 @@ public class GameViewManager extends ViewManager{
 						playerCharacter.manageBuff(time);
 						playerCharacter.draw(gc);
 						gc.strokeText(String.format("Time: %.2f", time),20,20);
-						
+						ScoreBoard.increaseScore(0.017);
+						String updateScore = String.format("Score: %d", (int) ScoreBoard.getScore()); 
+						gc.fillText(updateScore, 850, 20);
+						gc.strokeText(updateScore,850,20);
 					}
 					
 				};
@@ -528,6 +532,8 @@ public class GameViewManager extends ViewManager{
 				//Sound.endGameSound.play();
 				gameover.setContentText("GAME OVER...YOUE'RE DEAD!");
 				gameover.showAndWait();
+				ScoreBoard.addList(playerName, (int) ScoreBoard.getScore());
+				ScoreBoard.save();
 				g.interrupt();
 			}
 			catch(Exception e) {

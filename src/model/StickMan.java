@@ -53,6 +53,7 @@ public class StickMan{
 		}else {
 			Sound.punchSound.play(0.2);
 			target.takeDamage(StickMan.PUNCH_DAMAGE);
+			ScoreBoard.increaseScore(20);
 		}
 	}
 	public void punch(EnemyRed target) {
@@ -61,6 +62,7 @@ public class StickMan{
 		}else {
 			Sound.punchSound.play(0.2);
 			target.takeDamage(StickMan.PUNCH_DAMAGE);
+			ScoreBoard.increaseScore(20);
 		}
 	}
 	public void punch(EnemyBlue target) {
@@ -69,19 +71,23 @@ public class StickMan{
 		}else {
 			Sound.punchSound.play(0.2);
 			target.takeDamage(StickMan.PUNCH_DAMAGE);
+			ScoreBoard.increaseScore(20);
 		}
 	}
 	public void kick(EnemyGrey target) {
 		target.takeDamage(StickMan.KICK_DAMAGE);
 		Sound.kickSound.play(0.2);
+		ScoreBoard.increaseScore(30);
 	}
 	public void kick(EnemyRed target) {
 		target.takeDamage(StickMan.KICK_DAMAGE);
 		Sound.kickSound.play(0.2);
+		ScoreBoard.increaseScore(30);
 	}
 	public void kick(EnemyBlue target) {
 		target.takeDamage(StickMan.KICK_DAMAGE);
 		Sound.kickSound.play(0.2);
+		ScoreBoard.increaseScore(30);
 	}
 	
 	public void takeDamage(int dmg) {

@@ -46,6 +46,7 @@ public class EnemyBlue {
 	public void updateHp() {
 		if(hp <= 0) {
 			hpBar = 0;
+			ScoreBoard.increaseScore(1000);
 			alive = false;
 		}
 		else {
