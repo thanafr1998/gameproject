@@ -51,7 +51,7 @@ public class ScoreBoard extends MySubScene{
 	}
 	
 	public static void clearScore() throws FileNotFoundException, UnsupportedEncodingException {
-		PrintWriter writer = new PrintWriter("res/score.txt");
+		PrintWriter writer = new PrintWriter(ClassLoader.getSystemResource("res/score.txt").toString());
 		writer.println();
 		writer.close();
 	}
@@ -104,7 +104,7 @@ public class ScoreBoard extends MySubScene{
 	}
 	
 	public static void readHallOfFame(){
-		try (BufferedReader reader = new BufferedReader(new FileReader(new File("res/score.txt")))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(new File(ClassLoader.getSystemResource("res/score.txt").toString())))) {
 	        String line;
 	        while ((line = reader.readLine()) != null)
 	        {
