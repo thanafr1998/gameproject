@@ -1,7 +1,6 @@
 package buff;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import model.Character;
 import view.GameViewManager;
 import model.StickMan;

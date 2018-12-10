@@ -2,9 +2,7 @@ package obstacle;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.media.AudioClip;
 import model.Character;
-import model.Sound;
 import model.StickMan;
 import view.GameViewManager;
 

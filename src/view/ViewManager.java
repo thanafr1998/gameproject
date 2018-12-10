@@ -1,21 +1,18 @@
 package view;
 
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 //import javafx.scene.canvas.Canvas;
 //import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -24,12 +21,10 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import model.GameButton;
 import model.InfoLabel;
 import model.InputField;
 import model.Sound;
-import model.StickMan;
 import model.ScoreBoard;
 import model.MySubScene;
 
@@ -44,7 +39,7 @@ public class ViewManager {
 	private static final int button_x = 100;
 	private static final int button_y = 80;
 	private List<GameButton> menuButtons;
-	private GameButton resumeButton;
+	//private GameButton resumeButton;
 	
 	public static String playerName;
 	
@@ -62,6 +57,7 @@ public class ViewManager {
 		mainScene = new Scene(mainPane,width,height);
 		mainStage = new Stage();
 		mainStage.setScene(mainScene);
+		mainStage.setResizable(false);
 		playerName = "";
 		createButton();
 		createBackground();
@@ -70,10 +66,9 @@ public class ViewManager {
 	
 	private void createSubScene() {
 		
-		howToPlaySubScene = new MySubScene();
 		createPlaySubScene();
+		createHowToPlaySubScene();
 		createScoreSubScene();
-		mainPane.getChildren().add(howToPlaySubScene);
 	}
 	
 	private void createPlaySubScene() {
@@ -125,13 +120,28 @@ public class ViewManager {
 		playSubScene.getRootSubScene().getChildren().add(enterButton);
 		
 	}
+	
+	private void createHowToPlaySubScene() {
+		howToPlaySubScene = new MySubScene();
+		InfoLabel label1 = new InfoLabel("Press 'j' to walk left",30,-50,15);
+		InfoLabel label2 = new InfoLabel("Press 'l' to walk right",30,-10,15);
+		InfoLabel label3 = new InfoLabel("Press 'i' to jump",30,30,15);
+		InfoLabel label4 = new InfoLabel("Press 'k' to down the floor",30,70,15);
+		InfoLabel label5 = new InfoLabel("Press 'a' + 'direction' to punch",30,110,15);
+		InfoLabel label6 = new InfoLabel("Press 's' + 'direction' to kick",30,150,15);
+		InfoLabel label7 = new InfoLabel("Press 'd' to block",30,190,15);
+		InfoLabel label8 = new InfoLabel("Press 'c' to crouch",30,230,15);
+		mainPane.getChildren().add(howToPlaySubScene);
+		howToPlaySubScene.getRootSubScene().getChildren().addAll(label1,label2,label3,label4,label5,label6,label7,label8);
+	}
 
 	private void createScoreSubScene() {
 		scoreSubScene = new ScoreBoard();
-		InfoLabel label = new InfoLabel("HighScore :",50,0);
+		InfoLabel label = new InfoLabel("HighScore :",50,-30,18);
 		mainPane.getChildren().add(scoreSubScene);
 		scoreSubScene.getRootSubScene().getChildren().add(label);
 	}
+	
 	public Stage getMainStage(){
 		return mainStage;
 	}
@@ -152,25 +162,25 @@ public class ViewManager {
 		createExitButton();
 	}
 	
-	private void createResumeButton() {
-		resumeButton = new GameButton("Resume");
-		resumeButton.setDisable(true);
-		addMenuButton(resumeButton);
-		
-		resumeButton.setOnMousePressed(new EventHandler<MouseEvent>() {
-			
-			@Override
-			public void handle(MouseEvent event) {
-
-				if(event.getButton().equals(MouseButton.PRIMARY)) {
-				
-				gameViewManager.hideMenuScene(mainStage);
-								
-				}
-			}
-		
-		});
-	}
+//	private void createResumeButton() {
+//		resumeButton = new GameButton("Resume");
+//		resumeButton.setDisable(true);
+//		addMenuButton(resumeButton);
+//		
+//		resumeButton.setOnMousePressed(new EventHandler<MouseEvent>() {
+//			
+//			@Override
+//			public void handle(MouseEvent event) {
+//
+//				if(event.getButton().equals(MouseButton.PRIMARY)) {
+//				
+//				gameViewManager.hideMenuScene(mainStage);
+//								
+//				}
+//			}
+//		
+//		});
+//	}
 	
 	private void createNewGameButton() {
 		GameButton newGameButton = new GameButton("New Game");
@@ -237,6 +247,11 @@ public class ViewManager {
 		exitButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				try {
+					ScoreBoard.clearScore();
+				} catch (FileNotFoundException | UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
 				mainStage.close();
 			}
 		});
@@ -268,4 +283,7 @@ public class ViewManager {
 		this.menuButtons = menuButtons;
 	}
 	
+	public Stage getStage() {
+		return mainStage;
+	}
 }

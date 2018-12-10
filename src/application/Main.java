@@ -2,6 +2,7 @@ package application;
 	
 import javafx.application.Application;
 import javafx.stage.Stage;
+import model.ScoreBoard;
 import view.ViewManager;
 
 
@@ -13,6 +14,7 @@ public class Main extends Application {
 			primaryStage = view.getMainStage();
 			primaryStage.setTitle("Rambo Stickman");
 			primaryStage.setResizable(false);
+			ScoreBoard.clearScore();
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

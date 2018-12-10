@@ -3,8 +3,6 @@ package view;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.sun.scenario.DelayedRunnable;
-
 import buff.Buffs;
 import buff.DamageBuff;
 import buff.DefenceBuff;
@@ -18,7 +16,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -35,10 +32,8 @@ import model.GameButton;
 import model.Sound;
 import model.StickMan;
 import model.Character;
-import model.MySubScene;
 import model.ScoreBoard;
 import obstacle.Missile;
-import exception.*;
 
 public class GameViewManager extends ViewManager{
 
@@ -67,7 +62,7 @@ public class GameViewManager extends ViewManager{
 	private boolean attacked;
 	public AnimationTimer TIMER;
 	private GameButton button;
-	private boolean gamePaused;
+	//private boolean gamePaused;
 	
 	
 	public GameViewManager(String playerName) {
@@ -84,7 +79,7 @@ public class GameViewManager extends ViewManager{
 		buffs = new ArrayList<Buffs>();
 		lastAddRed = 0; lastAddBlue = 0; lastAddGrey = 0; lastAddMissile = 0; lastAddBuff = 0;
 		redWasFilled = false; blueWasFilled = false; greyWasFilled = false;
-		gamePaused = false;
+		//gamePaused = false;
 	}
 
 	private void createButton() {
@@ -372,9 +367,11 @@ public class GameViewManager extends ViewManager{
 					public void handle(long currentNanoTime) {
 						if(!playerCharacter.isAlive()) { 
 							TIMER.stop();
+							ScoreBoard.addList(playerCharacter.getName(),(int)ScoreBoard.getScore());
+							ScoreBoard.save();
 							Alert gameover = new Alert(Alert.AlertType.INFORMATION);
 							gameover.setTitle("GAMEOVER!");
-							gameover.setContentText("YOUE'RE DEAD...Good luck next time");
+							gameover.setContentText(String.format("YOUE'RE DEAD...Good luck next time \n You score = %d",(int) ScoreBoard.getScore()));
 							Platform.runLater(gameover::showAndWait);
 							hideGameScene();
 						}
@@ -504,7 +501,7 @@ public class GameViewManager extends ViewManager{
 								t = new Thread(() -> {
 									try {
 										M.setImage(new Image(ClassLoader.getSystemResource("image/EXPLOSION.png").toString()));
-										Sound.explosionSound.play(0.5);
+										Sound.explosionSound.play(0.3);
 										M.setBomb(playerCharacter.getX()-20,playerCharacter.getY()-20);
 										M.setSize(100,100);
 										Thread.sleep(500);
@@ -529,11 +526,7 @@ public class GameViewManager extends ViewManager{
 				};
 				TIMER.start();
 				Alert gameover = new Alert(AlertType.INFORMATION);
-				//Sound.endGameSound.play();
 				gameover.setContentText("GAME OVER...YOUE'RE DEAD!");
-				gameover.showAndWait();
-				ScoreBoard.addList(playerName, (int) ScoreBoard.getScore());
-				ScoreBoard.save();
 				g.interrupt();
 			}
 			catch(Exception e) {
@@ -547,8 +540,9 @@ public class GameViewManager extends ViewManager{
 	private void hideGameScene() {
 		
 		gameStage.hide();
-		hideStage.show();
-		
+		ViewManager view = new ViewManager();
+		view.getMainStage().setTitle("Rambo Stickman");
+		view.getMainStage().show();
 	}
 	
 	public Scene getGameScene() {

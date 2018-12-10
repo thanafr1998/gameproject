@@ -1,11 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-
-import javafx.application.Platform;
-import javafx.geometry.Insets;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import view.GameViewManager;
 
