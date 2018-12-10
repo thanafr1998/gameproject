@@ -35,7 +35,7 @@ import model.GameButton;
 import model.Sound;
 import model.StickMan;
 import model.Character;
-import model.subScene;
+import model.MySubScene;
 import obstacle.Missile;
 import exception.*;
 
@@ -50,7 +50,7 @@ public class GameViewManager extends ViewManager{
 	private Stage gameStage;
 	private Stage hideStage;
 	
-	private Thread g;
+	private Thread t, g;
 	private GraphicsContext gc;
 	
 	private StickMan playerCharacter;
@@ -60,9 +60,8 @@ public class GameViewManager extends ViewManager{
 	private ArrayList<Buffs> buffs;
 	private CopyOnWriteArrayList<Missile> missiles;
 	
-	int lastAddRed, lastAddBlue, lastAddGrey, lastAddMissile, lastAddBuff, score;
-	boolean redWasFilled, blueWasFilled, greyWasFilled;
-	private Thread t;
+	private int lastAddRed, lastAddBlue, lastAddGrey, lastAddMissile, lastAddBuff, score;
+	private boolean redWasFilled, blueWasFilled, greyWasFilled;
 	private ArrayList<String> input;
 	private boolean attacked;
 	public AnimationTimer TIMER;
@@ -71,10 +70,10 @@ public class GameViewManager extends ViewManager{
 	
 	
 	public GameViewManager(String playerName) {
-			
+		
 		InitializeStage();
 		createKeyListener();
-		//createButton();
+		createButton();
 		playerCharacter = new StickMan(playerName);
 		input = new ArrayList<String>();
 		RedBot = new ArrayList<EnemyRed>();
@@ -92,6 +91,7 @@ public class GameViewManager extends ViewManager{
 		button = new GameButton("MAINMENU");
 		button.setLayoutX(770);
 		button.setLayoutY(0);
+		button.setVisible(false);
 		button.setOnMousePressed(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -283,13 +283,13 @@ public class GameViewManager extends ViewManager{
 				}else if(input.contains("J") && !input.contains("A")) {
 					playerCharacter.walkLeft();
 					playerCharacter.setWalking(true);
-				}else if(input.contains("I") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
+				}else if(input.contains("I") && !playerCharacter.isJumping() && !playerCharacter.isDown()) {
 					playerCharacter.jump();
-				}else if(input.contains("C")  && !playerCharacter.isJumping() && !playerCharacter.isDowning()){
+				}else if(input.contains("C")  && !playerCharacter.isJumping() && !playerCharacter.isDown()){
 					playerCharacter.crouch();
-				}else if(input.contains("K") && !playerCharacter.isJumping() && !playerCharacter.isDowning()) {
+				}else if(input.contains("K") && !playerCharacter.isJumping() && !playerCharacter.isDown()) {
 					playerCharacter.down();
-				}else if(input.contains("D") && !playerCharacter.isJumping() && !playerCharacter.isDowning() && !playerCharacter.isWalking()) {
+				}else if(input.contains("D") && !playerCharacter.isJumping() && !playerCharacter.isDown() && !playerCharacter.isWalking()) {
 					playerCharacter.block();
 				}
 			}
@@ -545,10 +545,6 @@ public class GameViewManager extends ViewManager{
 		
 	}
 	
-	public AnchorPane getGamePane() {
-		return gamePane;
-	}
-
 	public Scene getGameScene() {
 		return gameScene;
 	}
@@ -564,7 +560,11 @@ public class GameViewManager extends ViewManager{
 	public void setGameStage(Stage gameStage) {
 		this.gameStage = gameStage;
 	}
-
+	
+	public AnchorPane getGamePane() {
+		return gamePane;
+	}
+	
 	public void setGamePane(AnchorPane gamePane) {
 		this.gamePane = gamePane;
 	}

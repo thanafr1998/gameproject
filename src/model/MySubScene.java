@@ -10,15 +10,15 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.util.Duration;
 
-public class subScene extends SubScene{
+public class MySubScene extends SubScene{
 
-	private AnchorPane rootSubScene = (AnchorPane) this.getRoot();
+	private AnchorPane rootSubScene;
 	private static boolean subSceneIsHidden;
 	
-	public subScene() {
+	public MySubScene() {
 		
 		super(new AnchorPane(), 500, 300);
-		
+		rootSubScene = (AnchorPane) this.getRoot();
 		BackgroundImage backgroundImage = new BackgroundImage(new Image(ClassLoader.getSystemResource("image/blue_panel.png").toString(),500,300,false,true), BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
 		subSceneIsHidden = true;
 		

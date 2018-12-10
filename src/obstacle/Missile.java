@@ -10,14 +10,16 @@ import view.GameViewManager;
 
 public class Missile {
 
-	public int width = 100;
-	public int height = 25;
+	public int width;
+	public int height;
 	private double X,Y;
 	private int vX;
 	private Image ms;
 	public boolean isExplode;
 	
 	public Missile() {
+		width = 100;
+		height = 25;
 		Y = Character.FLOOR_LEVEL[(int) (Math.random()*3.0)];
 		vX = (int) (Math.random()*4.0 + 2.0);
 		double temp = Math.random();
@@ -63,18 +65,18 @@ public class Missile {
 		ms = image;
 	}
 	
-	public void setSize(int i,int j) {
-		width = i;
-		height = j;
+	public void setSize(int width,int height) {
+		this.width = width;
+		this.height = height;
 	}
 	
 	public int getVX() {
 		return vX;
 	}
 	
-	public void setBomb(double i,double j) {
-		X = i;
-		Y = j;
+	public void setBomb(double X,double Y) {
+		this.X = X;
+		this.Y = Y;
 		vX = 0;
 	}
 

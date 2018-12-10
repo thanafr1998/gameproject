@@ -31,7 +31,7 @@ import model.InputField;
 import model.Sound;
 import model.StickMan;
 import model.ScoreBoard;
-import model.subScene;
+import model.MySubScene;
 
 public class ViewManager {
 
@@ -46,12 +46,12 @@ public class ViewManager {
 	private List<GameButton> menuButtons;
 	private GameButton resumeButton;
 	
-	public static String playerName = "";
+	public static String playerName;
 	
-	private subScene playSubScene;
-	private subScene howToPlaySubScene;
-	private subScene scoreSubScene;
-	private subScene showSubScene;
+	private MySubScene playSubScene;
+	private MySubScene howToPlaySubScene;
+	private MySubScene scoreSubScene;
+	private MySubScene showSubScene;
 	
 	private GameViewManager gameViewManager;
 	
@@ -62,22 +62,22 @@ public class ViewManager {
 		mainScene = new Scene(mainPane,width,height);
 		mainStage = new Stage();
 		mainStage.setScene(mainScene);
+		playerName = "";
 		createButton();
 		createBackground();
 		createSubScene();
-		//createLogo();
 	}
 	
 	private void createSubScene() {
 		
-		howToPlaySubScene = new subScene();
+		howToPlaySubScene = new MySubScene();
 		createPlaySubScene();
 		createScoreSubScene();
 		mainPane.getChildren().add(howToPlaySubScene);
 	}
 	
 	private void createPlaySubScene() {
-		playSubScene = new subScene();
+		playSubScene = new MySubScene();
 		InfoLabel label = new InfoLabel("Enter Your Name :");
 		GameButton enterButton = new GameButton("ENTER");
 		InputField enterName = new InputField("Enter Name (max 7 characters)");
@@ -137,31 +137,8 @@ public class ViewManager {
 		return mainStage;
 	}
 	
-	private void createLogo() {
-		ImageView logo = new ImageView(ClassLoader.getSystemResource("image/Contra-Energy-Logo.png").toString());
-		logo.setLayoutX(450);
-		logo.setLayoutY(450);
-		logo.setFitWidth(450);
-		logo.setFitHeight(100);
-		
-		logo.setOnMouseEntered(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				logo.setEffect(new DropShadow());
-			}
-		});
-		
-		logo.setOnMouseExited(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				logo.setEffect(null);
-			}
-		});
-		
-		mainPane.getChildren().add(logo);
-	}
 	
-	protected void addMenuButton(GameButton button) {
+	private void addMenuButton(GameButton button) {
 		button.setLayoutX(button_x);
 		button.setLayoutY(button_y + menuButtons.size()*100);
 		menuButtons.add(button);
@@ -206,7 +183,7 @@ public class ViewManager {
 
 				if(showSubScene == playSubScene) {
 					playSubScene.moveSubScene();
-					showSubScene = new subScene();
+					showSubScene = new MySubScene();
 				}else{
 					checkSubScene();
 					playSubScene.moveSubScene();
@@ -225,7 +202,7 @@ public class ViewManager {
 			public void handle(ActionEvent event) {
 				if(showSubScene == howToPlaySubScene) {
 					howToPlaySubScene.moveSubScene();
-					showSubScene = new subScene();
+					showSubScene = new MySubScene();
 				}else{
 					checkSubScene();
 					howToPlaySubScene.moveSubScene();
@@ -244,7 +221,7 @@ public class ViewManager {
 			public void handle(ActionEvent event) {
 				if(showSubScene == scoreSubScene) {
 					scoreSubScene.moveSubScene();
-					showSubScene = new subScene();
+					showSubScene = new MySubScene();
 				}else{
 					checkSubScene();
 					scoreSubScene.moveSubScene();
@@ -274,7 +251,7 @@ public class ViewManager {
 		}else if(showSubScene == scoreSubScene) {
 			scoreSubScene.moveSubScene();
 		}else {
-			showSubScene = new subScene();
+			showSubScene = new MySubScene();
 		}
 	}
 	

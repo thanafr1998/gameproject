@@ -29,8 +29,8 @@ public class GameButton extends Button{
 		initializeButtonListeners();
 	}
 
-	public void setFontSize(int a) {
-		setFont(Font.loadFont(ClassLoader.getSystemResource("font/kenvector_future.ttf").toExternalForm(),a));
+	public void setFontSize(int size) {
+		setFont(Font.loadFont(ClassLoader.getSystemResource("font/kenvector_future.ttf").toExternalForm(),size));
 	}
 
 	private void setButton(String style) {

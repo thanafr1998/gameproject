@@ -273,7 +273,7 @@ public class StickMan{
 	public void setJumping(boolean jumping) {
 		this.jumping = jumping;
 	}
-	public boolean isDowning() {
+	public boolean isDown() {
 		return down;
 	}
 	public boolean isAttacking() {

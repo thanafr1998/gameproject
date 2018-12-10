@@ -16,7 +16,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.util.Pair;
 
-public class ScoreBoard extends subScene{
+public class ScoreBoard extends MySubScene{
 	
 	private static List<Pair<String, Integer>> playerDataList;
 	public static Pane root;
